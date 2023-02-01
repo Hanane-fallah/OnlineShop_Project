@@ -52,3 +52,12 @@ class Promotion(models.Model):
 
     def __str__(self):
         return f'{self.name} : {self.value}'
+
+
+class InProcessPromo(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    promotion_id = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+    in_process = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.promotion_id} - {self.product_id}'
