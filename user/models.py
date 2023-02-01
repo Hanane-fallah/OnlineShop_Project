@@ -1,8 +1,11 @@
+from datetime import date
+
 from django.core.validators import RegexValidator
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
+
 
 # VALIDATORS
 def age_validate(age):
@@ -17,6 +20,22 @@ def age_validate(age):
         raise ValidationError(
             _('Age must be more than 18')
         )
+
+
+def account_number_validate(num):
+    if len(str(num)) != 16:
+        raise ValidationError(
+                _('Account number is invalid')
+            )
+
+
+def expiry_date_validate(ex_date):
+    today = date.today()
+    if ex_date < today:
+        raise ValidationError(
+            _('Expire Date is invalid')
+        )
+
 
 # MODELS
 class Customer(models.Model):
@@ -60,8 +79,8 @@ class Address(models.Model):
 
 class PayAccount(models.Model):
     user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    account_number = models.BigIntegerField()
-    expiry_date = models.DateField()
+    account_number = models.BigIntegerField(validators=[account_number_validate])
+    expiry_date = models.DateField(validators=[expiry_date_validate])
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
