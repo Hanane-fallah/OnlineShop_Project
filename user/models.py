@@ -52,7 +52,9 @@ class Address(models.Model):
     street = models.CharField(max_length=50)
     postal_code = models.CharField(max_length=9)
     detail = models.TextField(max_length=300)
-    is_default = models.BooleanField()
+    is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.street} - {self.detail[10]} : {self.is_default}'
+
+
