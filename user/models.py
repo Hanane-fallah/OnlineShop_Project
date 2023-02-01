@@ -58,3 +58,11 @@ class Address(models.Model):
         return f'{self.street} - {self.detail[10]} : {self.is_default}'
 
 
+class PayAccount(models.Model):
+    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    account_number = models.BigIntegerField()
+    expiry_date = models.DateField()
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.account_number} : {self.is_default}'
