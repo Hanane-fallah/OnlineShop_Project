@@ -41,3 +41,18 @@ class Customer(models.Model):
 
 class City(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Address(models.Model):
+    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    city_id = models.ForeignKey(City, on_delete=models.CASCADE)
+    street = models.CharField(max_length=50)
+    postal_code = models.CharField(max_length=9)
+    detail = models.TextField(max_length=300)
+    is_default = models.BooleanField()
+
+    def __str__(self):
+        return f'{self.street} - {self.detail[10]} : {self.is_default}'
