@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 
-
+# VALIDATORS
 def age_validate(age):
     if 18 < age:
         if age < 100:
@@ -18,7 +18,7 @@ def age_validate(age):
             _('Age must be more than 18')
         )
 
-
+# MODELS
 class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -37,3 +37,7 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.user_name
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
