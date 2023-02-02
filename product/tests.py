@@ -41,16 +41,15 @@ class ModelsTestCase(TestCase):
 
         Review.objects.create(user_id=u, product_id=b, rating='3', comment='some comments')
 
-    def test_user_create(self):
+    def test_product_create(self):
         cat_1 = Category.objects.get(name='test-cat')
         cat_2 = Category.objects.get(name='test-child-cat')
         product = Product.objects.get(name='test-product')
         promo_type = PromotionType.objects.get(name='discount')
         promo = Promotion.objects.get(name='test-promo')
-        inprocess_promo = InProcessPromo.objects.get(product_id=1, promotion_id=1, in_process=True)
-        review = Review.objects.get(user_id=1, product_id=1, rating='3', comment='some comments')
-        # print('ad ', promo_type)
-        # print('ad ', promo)
+        inprocess_promo = InProcessPromo.objects.get(product_id=2, promotion_id=2, in_process=True)
+        review = Review.objects.get(user_id=2, product_id=2, rating='3', comment='some comments')
+
         self.assertTrue(cat_1)
         self.assertTrue(cat_2)
         self.assertTrue(product)
