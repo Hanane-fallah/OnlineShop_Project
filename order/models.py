@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 
+from product.models import Promotion
 from user.models import Customer, PayAccount
 
 
@@ -38,9 +39,15 @@ class CartStatus(models.Model):
     def __str__(self):
         return self.status
 
-# class CartDetail(models.Model):
-#     cart_id = models.ForeignKey(UserCart, models.CASCADE)
-#     order_date = models.DateField(null=True, blank=True)
-#     pay_account_id = models.ForeignKey(PayAccount, on_delete=models.SET_NULL, null=True, blank=True)
-#     shipping_id = models.ForeignKey(Shipping)
-#
+
+class CartDetail(models.Model):
+    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE)
+    order_date = models.DateField(null=True, blank=True)
+    pay_account_id = models.ForeignKey(PayAccount, on_delete=models.SET_NULL, null=True, blank=True)
+    shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True)
+    promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True)
+    total_amount = models.FloatField(null=True, blank=True)
+    entry = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.cart_id} - {self.order_date} : {self.total_amount} $ - {self.entry}'
