@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from user.models import Customer
+from user.models import Customer, PayAccount
 
 
 # VALIDATORS
@@ -16,3 +16,21 @@ class UserCart(models.Model):
 
     def __str__(self):
         return f'{self.user_id} : {self.id}'
+
+
+class ShippingMethod(models.Model):
+    name =  models.CharField(max_length=100, unique=True)
+    price = models.FloatField()
+
+    def __str__(self):
+        return f'{self.name} - {self.price} $'
+
+
+
+
+# class CartDetail(models.Model):
+#     cart_id = models.ForeignKey(UserCart, models.CASCADE)
+#     order_date = models.DateField(null=True, blank=True)
+#     pay_account_id = models.ForeignKey(PayAccount, on_delete=models.SET_NULL, null=True, blank=True)
+#     shipping_id = models.ForeignKey(Shipping)
+#
