@@ -20,7 +20,7 @@ class UserCart(models.Model):
 
 
 class ShippingMethod(models.Model):
-    name =  models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     price = models.FloatField()
 
     def __str__(self):
