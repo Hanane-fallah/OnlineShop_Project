@@ -26,7 +26,17 @@ class ShippingMethod(models.Model):
         return f'{self.name} - {self.price} $'
 
 
+class CartStatus(models.Model):
+    STATUS = [
+        ('verification', 'verification'),
+        ('equiping', 'equiping'),
+        ('sending', 'sending'),
+        ('delivered', 'delivered')
+    ]
+    status = models.CharField(max_length=20, choices=STATUS)
 
+    def __str__(self):
+        return self.status
 
 # class CartDetail(models.Model):
 #     cart_id = models.ForeignKey(UserCart, models.CASCADE)
