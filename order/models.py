@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from product.models import Promotion
+from product.models import Promotion, Product
 from user.models import Customer, PayAccount
 
 
@@ -51,3 +51,12 @@ class CartDetail(models.Model):
 
     def __str__(self):
         return f'{self.cart_id} - {self.order_date} : {self.total_amount} $ - {self.entry}'
+
+
+class CartItem(models.Model):
+    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    qty = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.product_id} ^ {self.qty}'
