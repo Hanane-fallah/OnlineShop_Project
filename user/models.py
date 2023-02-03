@@ -1,5 +1,4 @@
 from datetime import date
-
 from django.core.validators import RegexValidator
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -25,8 +24,8 @@ def age_validate(age):
 def account_number_validate(num):
     if len(str(num)) != 16:
         raise ValidationError(
-                _('Account number is invalid')
-            )
+            _('Account number is invalid')
+        )
 
 
 def expiry_date_validate(ex_date):
@@ -42,7 +41,7 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     user_name = models.CharField(max_length=150, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     age = models.IntegerField(validators=[age_validate], blank=True, null=True)
     mobile = models.CharField(max_length=11, unique=True,
                               validators=[RegexValidator(r'09\d{9}', 'Your mobile number must start with 09')])
