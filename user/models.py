@@ -4,6 +4,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
+from iranian_cities.fields import OstanField, ShahrestanField
 
 
 # VALIDATORS
@@ -57,23 +58,17 @@ class Customer(models.Model):
         return self.user_name
 
 
-class City(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 class Address(models.Model):
     user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    city_id = models.ForeignKey(City, on_delete=models.CASCADE)
+    ostan = OstanField(default=8)
+    shahrestan = ShahrestanField(default=126)
     street = models.CharField(max_length=50)
     postal_code = models.CharField(max_length=9)
     detail = models.TextField(max_length=300)
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.street} - {self.detail[:10]} : {self.is_default}'
+        return f'{self.ostan} - {self.shahrestan} - {self.detail[:10]}'
 
 
 class PayAccount(models.Model):
