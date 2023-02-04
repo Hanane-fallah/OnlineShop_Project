@@ -1,9 +1,7 @@
 import uuid
-
 from django.db import models
-
 from product.models import Promotion, Product
-from user.models import Customer, PayAccount
+from user.models import Customer
 
 
 # VALIDATORS
@@ -43,7 +41,6 @@ class CartStatus(models.Model):
 class CartDetail(models.Model):
     cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE)
     order_date = models.DateField(null=True, blank=True)
-    pay_account_id = models.ForeignKey(PayAccount, on_delete=models.SET_NULL, null=True, blank=True)
     shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True)
     promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True)
     total_amount = models.FloatField(null=True, blank=True)
