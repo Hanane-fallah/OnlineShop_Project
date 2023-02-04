@@ -1,28 +1,24 @@
 from django.test import TestCase
 from .models import *
+from iranian_cities.models import Ostan, Shahrestan
 
 
 class ModelsTestCase(TestCase):
     def setUp(self) -> None:
+        """
+        here we create some test instances for our models
+        :return: None
+        """
+        # customer object
         a = Customer.objects.create(first_name='test-name',
-                                last_name='test-last',
-                                user_name='test-user',
-                                email='test@test.co',
-                                age=24,
-                                mobile='09909009009',
-                                slug='test'
-                                )  # id = 1
-
-        city = City.objects.create(name='sample-city')
-
-        Address.objects.create(user_id=a,
-                               city_id=city,
-                               street='sample-street',
-                               postal_code='999999999',
-                               detail='some extra detail',
-                               is_default=True
-                               )
-
+                                    last_name='test-last',
+                                    user_name='test-user',
+                                    email='test@test.co',
+                                    age=24,
+                                    mobile='09909009009',
+                                    slug='test'
+                                    )
+        # pay account object
         PayAccount.objects.create(
             user_id=a,
             account_number=1234123412341234,
@@ -31,11 +27,12 @@ class ModelsTestCase(TestCase):
         )
 
     def test_user_create(self):
+        """
+        here we queryset to get the instances created above
+        :return: OK if all instances are present in test database
+        """
         customer = Customer.objects.get(user_name='test-user')
-        address = Address.objects.get(detail='some extra detail')
         pay_acc = PayAccount.objects.get(account_number=1234123412341234)
-        # print('ad ', address)
+        # if the objects are present in test database the following lines are True
         self.assertTrue(customer)
-        self.assertTrue(address)
         self.assertTrue(pay_acc)
-
