@@ -7,6 +7,12 @@ from user.models import expiry_date_validate, Customer
 
 # VALIDATORS
 def digit_validate(digit):
+    '''
+    check digit positive or not
+    :param digit: entered number
+    :return: None or
+    :raise: ValidationError if digit is negative
+    '''
     if digit <= 0:
         raise ValidationError(
             _('must be positive')
@@ -15,6 +21,24 @@ def digit_validate(digit):
 
 # MODELS
 class Category(models.Model):
+    """
+    define Category model for products
+
+    ...
+
+    Attributes
+    ----------
+    parent_cat : Category object
+        self relation - each category can have one parent category or not ( main categories )
+    name : str
+        category's name
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of Category object.
+    """
     parent_cat = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
 
@@ -23,6 +47,35 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """
+    define Product model
+
+    ...
+
+    Attributes
+    ----------
+    name : str
+        name of the product
+    category_id : int
+        foreign key to Category model instance ( define product category )
+    brand : str
+        product brand name
+    info : str
+        product details & info
+    proce : float
+        product price
+    qty : int
+        product stock
+    image : str
+        path to the product image in project media
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of Product object.
+    """
     name = models.CharField(max_length=100, unique=True)
     category_id = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     brand = models.CharField(max_length=50)
@@ -36,6 +89,23 @@ class Product(models.Model):
 
 
 class PromotionType(models.Model):
+    """
+    define Promotion types for the website
+
+    ...
+
+    Attributes
+    ----------
+    name : str
+        name of the promotion type
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of PromotionType object.
+    """
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -43,11 +113,37 @@ class PromotionType(models.Model):
 
 
 class Promotion(models.Model):
+    """
+    define Promotion model
+
+    ...
+
+    Attributes
+    ----------
+    name : str
+        name of the promotion
+    type_id : int
+        foreign key to PromotionType model instance ( define promotion type )
+    value : float
+        promotion value( in % or $ )
+    hint : str
+        in percentage -> maximum promotion & in cash -> minimum & in cart promo -> Discount phrase
+    start_date : date
+        start date of promotion
+    end_date : date
+        end date of promotion
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of Promotion object.
+    """
     name = models.CharField(max_length=50, unique=True)
     type_id = models.ForeignKey(PromotionType, on_delete=models.DO_NOTHING)
     value = models.FloatField()
     hint = models.CharField(max_length=50)
-    # in percentage -> maximum promotion & in cash -> minimum & in cart promo -> Discount phrase
     start_date = models.DateField(default=date.today)
     end_date = models.DateField(null=False, validators=[expiry_date_validate])
 
@@ -56,6 +152,27 @@ class Promotion(models.Model):
 
 
 class InProcessPromo(models.Model):
+    """
+    model for inprocess promotions
+
+    ...
+
+    Attributes
+    ----------
+    product_id : int
+        foreign key to Product model instance
+    promotion_id : int
+        foreign key to Promotion model instance
+    in_process : bool
+        True if promotion is in-process, otherwise False
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of InProcessPromo object.
+    """
     product_id = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     promotion_id = models.ForeignKey(Promotion, on_delete=models.CASCADE)
     in_process = models.BooleanField(default=True)
@@ -65,6 +182,29 @@ class InProcessPromo(models.Model):
 
 
 class Review(models.Model):
+    """
+    model for Review of products
+
+    ...
+
+    Attributes
+    ----------
+    user_id : customer object
+        foreign key to customer model ( to define review owner )
+    product_id : int
+        foreign key to Product model instance ( define related product )
+    rating : str
+        number from 1-5 to define rating stars of product
+    comment : str
+        customer comment is stored in this field
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of Review object.
+    """
     RATING = [
         ('1', '1'),
         ('2', '2'),

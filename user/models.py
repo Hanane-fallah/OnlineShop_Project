@@ -8,7 +8,13 @@ from iranian_cities.fields import OstanField, ShahrestanField
 
 
 # VALIDATORS
-def age_validate(age):
+def age_validate(age) -> None:
+    """
+    return True if age value is in valid range (18-100)
+    else raise validation-error
+    :param age:customer age
+    :return:True
+    """
     if 18 < age:
         if age < 100:
             return True
@@ -23,6 +29,12 @@ def age_validate(age):
 
 
 def account_number_validate(num):
+    """
+    check account-number's length
+    raise ValidationError if != 16
+    :param num: account number
+    :return: None
+    """
     if len(str(num)) != 16:
         raise ValidationError(
             _('Account number is invalid')
@@ -30,6 +42,12 @@ def account_number_validate(num):
 
 
 def expiry_date_validate(ex_date):
+    """
+    check expiry date
+    :raise ValidationError if expiry-date is passed from current day
+    :param ex_date: entered expiry date
+    :return: None
+    """
     today = date.today()
     if ex_date < today:
         raise ValidationError(
@@ -39,6 +57,35 @@ def expiry_date_validate(ex_date):
 
 # MODELS
 class Customer(models.Model):
+    """
+    define Customer model
+
+    ...
+
+    Attributes
+    ----------
+    first-name : str
+        first name of the person
+    last-name : str
+        last name of the person
+    user-name : str
+        username of the person
+    email : str
+        email of the person
+    age : int
+        age of the person
+    mobile : str
+        mobile number of the person
+    slug : str
+        a short label for person's username
+
+    Methods
+    -------
+    save:
+        set the slug field and save the object in database
+    str:
+        string representation of Customer object.
+    """
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     user_name = models.CharField(max_length=150, unique=True)
@@ -51,6 +98,13 @@ class Customer(models.Model):
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
+        """
+        adding a slug (-) in each of the string where there is a space in username
+        & put it in slug field
+        & then save the object in database
+        :param force_insert, force_update, using, update_fields: django default params
+        :return:None
+        """
         self.slug = slugify(self.user_name)
         super().save()
 
@@ -59,6 +113,34 @@ class Customer(models.Model):
 
 
 class Address(models.Model):
+    """
+    define Address model for customers
+
+    ...
+
+    Attributes
+    ----------
+    user_id : customer object
+        foreign key to customer model ( to define address owner )
+    ostan : iranian_cities.models.Ostan
+        ostan of address
+    shahrestan : iranian_cities.models.shahrestan
+        shahrestan of address
+    street : str
+        street of address
+    postal_code : str
+        postal_code of address
+    detail : str
+        some extra info about address like apartment floor ...
+    is_default : bool
+        True if customer's default address, otherwise False
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of Address object.
+    """
     user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     ostan = OstanField(default=8)
     shahrestan = ShahrestanField(default=126)
@@ -72,6 +154,28 @@ class Address(models.Model):
 
 
 class PayAccount(models.Model):
+    """
+    define Pay-Account model for customers
+
+    ...
+
+    Attributes
+    ----------
+    user_id : customer object
+        foreign key to customer model ( to define account owner )
+    account_number : int
+        customer's account number
+    expiry_date : date
+        account's expiry date
+    is_default : bool
+        True if customer's default account, otherwise False
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of PayAccount object.
+    """
     user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     account_number = models.BigIntegerField(validators=[account_number_validate])
     expiry_date = models.DateField(validators=[expiry_date_validate])
