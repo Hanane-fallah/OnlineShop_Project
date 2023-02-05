@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps
+    'user',
+    'product',
+    'order',
+    'iranian_cities',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +81,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'onlineshop',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
