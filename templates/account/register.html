@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="../../static/css/style-login.css">
+
+    <link rel="stylesheet" href="../../static/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="../../static/css/style-login.css">
+
+    <title>Register</title>
+</head>
+<body>
+
+<div class="d-lg-flex half">
+    <div class="bg order-1 order-md-2" style="background-image: url('../../static/img/bg_1.jpg');"></div>
+    <div class="contents order-2 order-md-1">
+
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-7" style="transform: scale(0.9);">
+                    <h3>Signup to <strong>Amado</strong></h3>
+                    <p class="mb-4">Register Your Info Here & click Sign up Button</p>
+                    <form action="" method="post">
+                            {{ form.non_field_errors }}
+                            {% csrf_token %}
+                            <div class="form-group first">
+                                <label for="first_name">First Name</label>
+                                <input type="text" class="form-control" placeholder="Your First Name" id="first_name"
+                                       name="first_name">
+                                {{ form.first_name.errors }}
+                            </div>
+                            <div class="form-group first">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Your Last Name" id="last_name"
+                                       name="last_name">
+                                {{ form.last_name.errors }}
+                            </div>
+                            <div class="form-group first">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" placeholder="Your Username" id="username"
+                                       name="username">
+                                {{ form.username.errors }}
+                            </div>
+                            <div class="form-group last mb-3">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" placeholder="Your Password" id="password1"
+                                       name="password1">
+                                <p>{{ form.password1.errors }}</p>
+                            </div>
+                            <div class="form-group last mb-3">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" placeholder="Confirm Your Password"
+                                       id="password2"
+                                       name="password2">
+                                <p>{{ form.password2.errors }}</p>
+
+                            </div>
+                            <div class="form-group last mb-3">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" placeholder="Your Email" id="email"
+                                       name="email">
+                                <p>{{ form.email.errors }}</p>
+                            </div>
+                            <div class="form-group last mb-3">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" placeholder="Your Age" id="age"
+                                       name="age">
+                                <p>{{ form.age.errors }}</p>
+                            </div>
+                            <div class="form-group last mb-3">
+                                <label for="mobile">Mobile</label>
+                                <input type="text" class="form-control" placeholder="Your Mobile Number" id="mobile"
+                                       name="mobile">
+                                <p>{{ form.mobile.errors }}</p>
+                            </div>
+
+                            <div class="d-flex mb-5 align-items-center">
+                                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                                    <input type="checkbox" checked="checked"/>
+                                    <div class="control__indicator"></div>
+                                </label>
+                                <p id="choose_admin" style="margin: 10px">You are Admin? click
+                                    <button onclick="adminfunc()">here</button>
+                                </p>
+
+                            </div>
+{#                            <div class="d-flex mb-5 align-items-center">#}
+{#                            </div>#}
+
+                            <input type="submit" value="Sign up" class="btn btn-block btn-primary">
+                            {% if form.errors %}
+                                {{ form.errors }}
+                        {% endif %}
+                        </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+function adminfunc() {
+  document.getElementById("choose_admin").innerHTML ='<input type="radio" name="admin" value="controller"> Controller<br>'+
+                                                     '<input type="radio" name="admin" value="operator"> Operator<br>'+
+                                                     '<input type="radio" name="admin" value="product_manager"> Product Manager';
+}
+</script>
+
+<script src="../../static/js/jquery-3.3.1.min.js"></script>
+<script src="../../static/js/popper.min.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/main-login.js"></script>
+</body>
+</html>
