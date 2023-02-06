@@ -2,7 +2,7 @@ from datetime import date
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from user.models import expiry_date_validate, Customer
+from user.models import expiry_date_validate, User
 
 
 # VALIDATORS
@@ -189,14 +189,14 @@ class Review(models.Model):
 
     Attributes
     ----------
-    user_id : customer object
-        foreign key to customer model ( to define review owner )
+    user_id : user object
+        foreign key to user model ( to define review owner )
     product_id : int
         foreign key to Product model instance ( define related product )
     rating : str
         number from 1-5 to define rating stars of product
     comment : str
-        customer comment is stored in this field
+        user comment is stored in this field
 
     Methods
     -------
@@ -212,7 +212,7 @@ class Review(models.Model):
         ('4', '4'),
         ('5', '5'),
     ]
-    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.CharField(max_length=1, choices=RATING)
     comment = models.TextField(max_length=600)

@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from product.models import Promotion, Product
-from user.models import Customer
+from user.models import User
 
 
 # VALIDATORS
@@ -9,7 +9,7 @@ from user.models import Customer
 # MODELS
 class UserCart(models.Model):
     """
-    model for Customer's Shopping Cart
+    model for User's Shopping Cart
 
     ...
 
@@ -17,8 +17,8 @@ class UserCart(models.Model):
     ----------
     id : str
         generating uuid for each cart ( as primary key )
-    user_id : customer object
-        foreign key to customer model ( to define cart owner )
+    user_id : user object
+        foreign key to user model ( to define cart owner )
 
     Methods
     -------
@@ -30,7 +30,7 @@ class UserCart(models.Model):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.user_id} : {self.id}'
@@ -98,15 +98,15 @@ class CartDetail(models.Model):
     cart_id : str
         foreign key to Cart model ( connect cart to cart detail )
     order_date : date
-        cart register date ( will be added when customer register and pay the cart )
+        cart register date ( will be added when user register and pay the cart )
     shipping_id : int
         foreign key to Shipping model
     promotion_id : int
-        foreign key to Promotion model ( id customer has a promotion hint for cart )
+        foreign key to Promotion model ( id user has a promotion hint for cart )
     total_amount : float
         final total amount of cart to pay
     entry : bool
-        True if customer registered & closed cart, otherwise False
+        True if user registered & closed cart, otherwise False
 
     Methods
     -------

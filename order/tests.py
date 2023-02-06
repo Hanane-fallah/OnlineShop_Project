@@ -9,15 +9,15 @@ class ModelsTestCase(TestCase):
         here we create some test instances for our models
         :return: None
         """
-        # customer object for usercart
-        a = Customer.objects.create(first_name='test-name',
-                                    last_name='test-last',
-                                    user_name='test-user',
-                                    email='test@test.co',
-                                    age=24,
-                                    mobile='09909009009',
-                                    slug='test'
-                                    )  # id = 1
+        # user object for usercart
+        a = User.objects.create(first_name='test-name',
+                                last_name='test-last',
+                                user_name='test-user',
+                                email='test@test.co',
+                                age=24,
+                                mobile='09909009009',
+                                slug='test'
+                                )  # id = 1
 
         # user cart object
         uc = UserCart.objects.create(id='f377180a-aa2e-4799-bb2e-f55468e0f991', user_id=a)

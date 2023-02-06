@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 from iranian_cities.fields import OstanField, ShahrestanField
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group, Permission, PermissionsMixin
 
 
 # VALIDATORS
@@ -12,7 +14,7 @@ def age_validate(age) -> None:
     """
     return True if age value is in valid range (18-100)
     else raise validation-error
-    :param age:customer age
+    :param age:user age
     :return:True
     """
     if 18 < age:
@@ -56,22 +58,14 @@ def expiry_date_validate(ex_date):
 
 
 # MODELS
-class Customer(models.Model):
+class User(AbstractUser):
     """
-    define Customer model
+    define User model overriding on django AbstractUser model
 
     ...
 
-    Attributes
+    Additional Attributes
     ----------
-    first-name : str
-        first name of the person
-    last-name : str
-        last name of the person
-    user-name : str
-        username of the person
-    email : str
-        email of the person
     age : int
         age of the person
     mobile : str
@@ -84,12 +78,8 @@ class Customer(models.Model):
     save:
         set the slug field and save the object in database
     str:
-        string representation of Customer object.
+        string representation of User object.
     """
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    user_name = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
     age = models.IntegerField(validators=[age_validate], blank=True, null=True)
     mobile = models.CharField(max_length=11, unique=True,
                               validators=[RegexValidator(r'09\d{9}', 'Your mobile number must start with 09')])
@@ -105,11 +95,11 @@ class Customer(models.Model):
         :param force_insert, force_update, using, update_fields: django default params
         :return:None
         """
-        self.slug = slugify(self.user_name)
+        self.slug = slugify(self.username)
         super().save()
 
     def __str__(self):
-        return self.user_name
+        return self.username
 
 
 class Address(models.Model):
@@ -120,8 +110,8 @@ class Address(models.Model):
 
     Attributes
     ----------
-    user_id : customer object
-        foreign key to customer model ( to define address owner )
+    user_id : user object
+        foreign key to user model ( to define address owner )
     ostan : iranian_cities.models.Ostan
         ostan of address
     shahrestan : iranian_cities.models.shahrestan
@@ -133,7 +123,7 @@ class Address(models.Model):
     detail : str
         some extra info about address like apartment floor ...
     is_default : bool
-        True if customer's default address, otherwise False
+        True if user's default address, otherwise False
     Methods
     -------
     save:
@@ -141,7 +131,7 @@ class Address(models.Model):
     str:
         string representation of Address object.
     """
-    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     ostan = OstanField(default=8)
     shahrestan = ShahrestanField(default=126)
     street = models.CharField(max_length=50)
@@ -161,14 +151,14 @@ class PayAccount(models.Model):
 
     Attributes
     ----------
-    user_id : customer object
-        foreign key to customer model ( to define account owner )
+    user_id : user object
+        foreign key to user model ( to define account owner )
     account_number : int
-        customer's account number
+        user's account number
     expiry_date : date
         account's expiry date
     is_default : bool
-        True if customer's default account, otherwise False
+        True if user's default account, otherwise False
     Methods
     -------
     save:
@@ -176,7 +166,7 @@ class PayAccount(models.Model):
     str:
         string representation of PayAccount object.
     """
-    user_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     account_number = models.BigIntegerField(validators=[account_number_validate])
     expiry_date = models.DateField(validators=[expiry_date_validate])
     is_default = models.BooleanField(default=False)

@@ -44,14 +44,14 @@ class ModelsTestCase(TestCase):
         InProcessPromo.objects.create(product_id=b, promotion_id=d, in_process=True)
 
         # cutomer object for review
-        u = Customer.objects.create(first_name='test-name',
-                                    last_name='test-last',
-                                    user_name='test-user',
-                                    email='test@test.co',
-                                    age=24,
-                                    mobile='09909009009',
-                                    slug='test'
-                                    )  # id = 1
+        u = User.objects.create(first_name='test-name',
+                                last_name='test-last',
+                                user_name='test-user',
+                                email='test@test.co',
+                                age=24,
+                                mobile='09909009009',
+                                slug='test'
+                                )  # id = 1
         # review object
         Review.objects.create(user_id=u, product_id=b, rating='3', comment='some comments')
 

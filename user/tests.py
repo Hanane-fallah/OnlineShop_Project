@@ -9,15 +9,15 @@ class ModelsTestCase(TestCase):
         here we create some test instances for our models
         :return: None
         """
-        # customer object
-        a = Customer.objects.create(first_name='test-name',
-                                    last_name='test-last',
-                                    user_name='test-user',
-                                    email='test@test.co',
-                                    age=24,
-                                    mobile='09909009009',
-                                    slug='test'
-                                    )
+        # user object
+        a = User.objects.create(first_name='test-name',
+                                last_name='test-last',
+                                user_name='test-user',
+                                email='test@test.co',
+                                age=24,
+                                mobile='09909009009',
+                                slug='test'
+                                )
         # pay account object
         PayAccount.objects.create(
             user_id=a,
@@ -31,7 +31,7 @@ class ModelsTestCase(TestCase):
         here we queryset to get the instances created above
         :return: OK if all instances are present in test database
         """
-        customer = Customer.objects.get(user_name='test-user')
+        customer = User.objects.get(user_name='test-user')
         pay_acc = PayAccount.objects.get(account_number=1234123412341234)
         # if the objects are present in test database the following lines are True
         self.assertTrue(customer)
