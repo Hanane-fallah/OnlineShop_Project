@@ -180,6 +180,17 @@ class InProcessPromo(models.Model):
     def __str__(self):
         return f'{self.promotion_id} - {self.product_id}'
 
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        promo_end = self.promotion_id.end_date
+        if expiry_date_validate(promo_end):
+            super().save()
+        else:
+            raise ValidationError(
+                _('This promo is expired')
+            )
+
 
 class Review(models.Model):
     """
