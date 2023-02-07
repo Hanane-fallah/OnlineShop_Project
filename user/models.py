@@ -6,7 +6,6 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 from iranian_cities.fields import OstanField, ShahrestanField
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group, Permission, PermissionsMixin
 
 
 # VALIDATORS
@@ -55,6 +54,8 @@ def expiry_date_validate(ex_date):
         raise ValidationError(
             _('Expire Date is invalid')
         )
+    else:
+        return (ex_date - today).days
 
 
 # MODELS
@@ -172,4 +173,4 @@ class PayAccount(models.Model):
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.account_number} : {self.is_default}'
+        return f'{self.user_id} - {self.account_number}'
