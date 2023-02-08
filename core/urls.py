@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from product.views import Index
+from product.views import Categories
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', Index.as_view(), name='index'),
+    path('', Categories.as_view(), name='index'),
     path('admin/', admin.site.urls),
     # path('accounts/', include('django.contrib.auth.urls'))
-    path('accounts/', include(('user.urls', 'user'), namespace='account'))
-]
+    path('accounts/', include(('user.urls', 'user'), namespace='account')),
+    path('products/', include(('product.urls', 'product'), namespace='product')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

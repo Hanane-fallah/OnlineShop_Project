@@ -12,10 +12,10 @@
     <title>Amado - Furniture Ecommerce Template | Home</title>
     {% load static %}
     <!-- Favicon  -->
-    <link rel="icon" href="../static/img/core-img/favicon.ico">
+    <link rel="icon" href="../../static/img/core-img/favicon.ico">
 
     <!-- Core Style CSS -->
-    <link rel="stylesheet" href="../static/css/core-style.css">
+    <link rel="stylesheet" href="../../static/css/core-style.css">
     <link rel="stylesheet" href="../static/css/style.css">
 
 </head>
@@ -32,7 +32,7 @@
                     <div class="search-content">
                         <form action="#" method="get">
                             <input type="search" name="search" id="search" placeholder="Type your keyword...">
-                            <button type="submit"><img src="../static/img/core-img/search.png" alt=""></button>
+                            <button type="submit"><img src="../../static/img/core-img/search.png" alt=""></button>
                         </form>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
         <div class="mobile-nav">
             <!-- Navbar Brand -->
             <div class="amado-navbar-brand">
-                <a href="index.html"><img src="../static/img/core-img/logo.png" alt=""></a>
+                <a href="index.html"><img src="../../static/img/core-img/logo.png" alt=""></a>
             </div>
             <!-- Navbar Toggler -->
             <div class="amado-navbar-toggler">
@@ -64,16 +64,21 @@
             </div>
             <!-- Logo -->
             <div class="logo">
-                <a href="index.html"><img src="../static/img/core-img/logo.png" alt=""></a>
+                <a href="index.html"><img src="../../static/img/core-img/logo.png" alt=""></a>
             </div>
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li class="active"><a href="index.html">Home</a></li>
+                    <li class="active"><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="shop.html">Shop</a></li>
-                    <li><a href="product-details.html">Product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="product-details.html">Cart</a></li>
+                        <li><a href="checkout.html">Checkout</a></li>
+                        <li><a href="product-details.html">Profile</a></li>
+                    {% else %}
+                        <li><a href="{% url 'account:register' %}">SignUp</a></li>
+                        <li><a href="{% url 'account:login' %}">LogIn</a></li>
+                    {% endif %}
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -83,9 +88,9 @@
             </div>
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
-                <a href="cart.html" class="cart-nav"><img src="../static/img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
-                <a href="#" class="fav-nav"><img src="../static/img/core-img/favorites.png" alt=""> Favourite</a>
-                <a href="#" class="search-nav"><img src="../static/img/core-img/search.png" alt=""> Search</a>
+                <a href="cart.html" class="cart-nav"><img src="../../static/img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
+                <a href="#" class="fav-nav"><img src="../../static/img/core-img/favorites.png" alt=""> Favourite</a>
+                <a href="#" class="search-nav"><img src="../../static/img/core-img/search.png" alt=""> Search</a>
             </div>
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
@@ -100,123 +105,24 @@
         <!-- Product Catagories Area Start -->
         <div class="products-catagories-area clearfix">
             <div class="amado-pro-catagory clearfix">
-
+                {% load static %}
                 <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
+                {% for product in object_list %}
+
+                    <div class="single-products-catagory clearfix">
                     <a href="shop.html">
-                        <img src="../static/img/bg-img/1.jpg" alt="">
+                        <img src="{{ product.image.url }}" alt="">
                         <!-- Hover Content -->
                         <div class="hover-content">
                             <div class="line"></div>
                             <p>From $180</p>
-                            <h4>Modern Chair</h4>
+                            <h4>{{ product.name }}</h4>
                         </div>
                     </a>
                 </div>
 
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/2.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $180</p>
-                            <h4>Minimalistic Plant Pot</h4>
-                        </div>
-                    </a>
-                </div>
+                {% endfor %}
 
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/3.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $180</p>
-                            <h4>Modern Chair</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/4.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $180</p>
-                            <h4>Night Stand</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/5.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $18</p>
-                            <h4>Plant Pot</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/6.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $320</p>
-                            <h4>Small Table</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/7.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $318</p>
-                            <h4>Metallic Chair</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/8.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $318</p>
-                            <h4>Modern Rocking Chair</h4>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Catagory -->
-                <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
-                        <img src="../static/img/bg-img/9.jpg" alt="">
-                        <!-- Hover Content -->
-                        <div class="hover-content">
-                            <div class="line"></div>
-                            <p>From $318</p>
-                            <h4>Home Deco</h4>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
         <!-- Product Catagories Area End -->
@@ -257,7 +163,7 @@
                     <div class="single_widget_area">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="index.html"><img src="../static/img/core-img/logo2.png" alt=""></a>
+                            <a href="index.html"><img src="../../static/img/core-img/logo2.png" alt=""></a>
                         </div>
                         <!-- Copywrite Text -->
                         <p class="copywrite"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -275,20 +181,27 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                                 <div class="collapse navbar-collapse" id="footerNavContent">
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item active">
-                                            <a class="nav-link" href="index.html">Home</a>
+                                            <a class="nav-link" href="{% url 'index' %}">Home</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="shop.html">Shop</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="product-details.html">Product</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="cart.html">Cart</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="checkout.html">Checkout</a>
-                                        </li>
+                                        {% if user.is_authenticated %}
+                                            <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'index' %}">Cart</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'index' %}">Checkout</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'index' %}">Profile</a>
+                                            </li>
+
+                                        {% else %}
+                                           <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'account:register' %}">SignUp</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                            <a class="nav-link" href="{% url 'account:login' %}">LogIn</a>
+                                            </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </nav>
@@ -301,15 +214,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- ##### Footer Area End ##### -->
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
-    <script src="../static/js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="../../static/js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
-    <script src="../static/js/popper.min.js"></script>
+    <script src="../../static/js/popper.min.js"></script>
     <!-- Bootstrap js -->
-    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
     <!-- Plugins js -->
-    <script src="../static/js/plugins.js"></script>
+    <script src="../../static/js/plugins.js"></script>
     <!-- Active js -->
-    <script src="../static/js/active.js"></script>
+    <script src="../../static/js/active.js"></script>
 
 </body>
 
