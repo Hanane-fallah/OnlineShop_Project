@@ -16,7 +16,7 @@
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="../../static/css/core-style.css">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
 
 </head>
 
@@ -70,7 +70,7 @@
             <nav class="amado-nav">
                 <ul>
                     <li class="active"><a href="{% url 'index' %}">Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="{% url 'product:shop' %}">Shop</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="product-details.html">Cart</a></li>
                         <li><a href="checkout.html">Checkout</a></li>

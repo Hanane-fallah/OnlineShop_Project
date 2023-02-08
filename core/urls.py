@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from product.views import Categories
+from product.views import IndexCategories
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', Categories.as_view(), name='index'),
+    path('', IndexCategories.as_view(), name='index'),
     path('admin/', admin.site.urls),
     # path('accounts/', include('django.contrib.auth.urls'))
     path('accounts/', include(('user.urls', 'user'), namespace='account')),
