@@ -17,7 +17,7 @@ class CategoryAdmin(admin.ModelAdmin):
             return '--- Main ---'
 
     fieldsets = (
-        ('Main info', {'fields': ('name', 'parent_cat')}),
+        ('Main info', {'fields': ('name', 'parent_cat', 'image')}),
 
     )
 
