@@ -1,28 +1,33 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-
 from product.models import Category, Product, Promotion, PromotionType, InProcessPromo, Review
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent_category',)
-    list_filter = ('parent_cat',)
+    list_display = ('name', 'parent_category', 'children_categories', 'cat_products')
+    list_filter = ('parent',)
 
     def parent_category(self, obj):
-        if obj.parent_cat:
-            return obj.parent_cat
+        if obj.parent:
+            return obj.parent
         else:
             return '--- Main ---'
 
+    def children_categories(self, obj):
+        return obj.count_children()
+
+    def cat_products(self, obj):
+        return obj.count_products()
+
     fieldsets = (
-        ('Main info', {'fields': ('name', 'parent_cat', 'image')}),
+        ('Main info', {'fields': ('name', 'parent', 'image')}),
 
     )
 
     add_fieldsets = (
-        (None, {'fields': ('name', 'parent_cat')})
+        (None, {'fields': ('name', 'parent')})
     )
     search_fields = ('name',)
     ordering = ('name',)
