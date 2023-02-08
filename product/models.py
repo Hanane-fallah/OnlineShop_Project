@@ -39,7 +39,7 @@ class Category(models.Model):
     str:
         string representation of Category object.
     """
-    parent_cat = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
     image = models.ImageField(upload_to='img/category', default='img/category/product5')
 
@@ -48,6 +48,22 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def children(self):
+        children = Category.objects.filter(parent=self.id)
+        return children
+
+    def count_children(self):
+        count_child = self.children().count()
+        return count_child
+
+    def count_products(self):
+        child = self.children()
+        count_product = Product.objects.filter(category_id__in=[c.id for c in child] + [self.id]).count()
+        if count_product:
+            return count_product
+        else:
+            return '--- No Product ---'
 
 
 class Product(models.Model):
@@ -185,7 +201,7 @@ class InProcessPromo(models.Model):
         return f'{self.promotion_id} - {self.product_id}'
 
     def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
+            self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
         promo_end = self.promotion_id.end_date
         if expiry_date_validate(promo_end):
