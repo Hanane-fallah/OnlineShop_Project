@@ -57,11 +57,15 @@ class Category(models.Model):
         count_child = self.children().count()
         return count_child
 
-    def count_products(self):
+    def products(self):
         child = self.children()
-        count_product = Product.objects.filter(category_id__in=[c.id for c in child] + [self.id]).count()
-        if count_product:
-            return count_product
+        products = Product.objects.filter(category_id__in=[c.id for c in child] + [self.id])
+        return products
+
+    def count_products(self):
+        count_products = self.products().count()
+        if count_products:
+            return count_products
         else:
             return '--- No Product ---'
 
