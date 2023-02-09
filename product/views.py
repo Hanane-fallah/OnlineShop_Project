@@ -1,5 +1,5 @@
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from user.decorators import admin_user
 from product.models import Product, Category
 
@@ -35,3 +35,7 @@ class ShopCategories(ListView):
             context['products'] = Product.objects.all()
 
         return context
+
+
+class ProductDetail(DetailView):
+    model = Product

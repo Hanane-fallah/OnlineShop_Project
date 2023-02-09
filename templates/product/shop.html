@@ -153,8 +153,9 @@
                     <div class="col-12 col-sm-6 col-md-12 col-xl-6">
                         <div class="single-product-wrapper">
                             <!-- Product Image -->
-                            <div class="product-img">
+                            <div class="product-img"><a href="{% url 'product:detail' p.name %}">
                                 <img src="{{ p.image.url }}" alt="">
+                            </a>
                                 <!-- Hover Thumb -->
                                 <img class="{{ p.image.url }}" alt="">
                             </div>
@@ -165,15 +166,15 @@
                                 <div class="product-meta-data">
                                     <div class="line"></div>
                                     <p class="product-price">${{ p.price }}</p>
-                                    <a href="product-details.html">
-                                        <h6>Modern Chair</h6>
+                                    <a href="{% url 'product:detail' p.name %}">
+                                        <h6>{{ p.name|title }}</h6>
                                     </a>
                                 </div>
                                 <!-- Ratings & Cart -->
                                 <div class="ratings-cart text-right">
                                     <div class="ratings">
                                         <i class="fa fa-star" aria-hidden="true"></i>
-                                        <i class="fa " aria-hidden="true"></i>
+                                        <i class="fa fa-star-o" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
