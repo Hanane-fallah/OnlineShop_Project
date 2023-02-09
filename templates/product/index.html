@@ -75,9 +75,10 @@
                         <li><a href="product-details.html">Cart</a></li>
                         <li><a href="checkout.html">Checkout</a></li>
                         <li><a href="product-details.html">Profile</a></li>
+                        <li><a href="{% url 'account:logout' %}">LogOut</a></li>
                     {% else %}
-                        <li><a href="{% url 'account:register' %}">SignUp</a></li>
                         <li><a href="{% url 'account:login' %}">LogIn</a></li>
+                        <li><a href="{% url 'account:register' %}">SignUp</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -110,7 +111,7 @@
                 {% for product in object_list %}
 
                     <div class="single-products-catagory clearfix">
-                    <a href="shop.html">
+                    <a href="{% url 'product:category' product.name %}">
                         <img src="{{ product.image.url }}" alt="">
                         <!-- Hover Content -->
                         <div class="hover-content">

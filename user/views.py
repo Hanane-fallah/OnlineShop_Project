@@ -59,5 +59,5 @@ class LoginPage(View):
 class LogoutPage(View):
     def get(self, request):
         logout(request)
-        return redirect('account:login')
+        return redirect('index')
 
