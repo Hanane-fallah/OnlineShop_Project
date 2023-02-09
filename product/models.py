@@ -100,7 +100,7 @@ class Product(models.Model):
     str:
         string representation of Product object.
     """
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, primary_key=True)
     category_id = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     brand = models.CharField(max_length=50)
     info = models.TextField(max_length=300)
