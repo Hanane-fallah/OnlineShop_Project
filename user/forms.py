@@ -15,3 +15,8 @@ class CustomerChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'password', 'email', 'mobile', 'age')
+
+
+class VerifyCodeForm(forms.Form):
+    code = forms.IntegerField()
+

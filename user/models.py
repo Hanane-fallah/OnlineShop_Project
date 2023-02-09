@@ -174,3 +174,12 @@ class PayAccount(models.Model):
 
     def __str__(self):
         return f'{self.user_id} - {self.account_number}'
+
+
+class OptCode(models.Model):
+    phone_number = models.CharField(max_length=11)
+    code = models.PositiveSmallIntegerField()
+    created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.phone_number} - {self.code} : {self.created}'

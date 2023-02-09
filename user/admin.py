@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.http import urlencode
-
 from user.models import *
 from .forms import CustomerChangeForm, CustomerCreationFrom
 
@@ -32,8 +30,6 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    # form = CustomerChangeForm
-    # add_form = CustomerCreationFrom
 
     list_display = ('ostan', 'shahrestan', 'user', 'is_default')
     list_filter = ('is_default', 'ostan',)
@@ -45,23 +41,21 @@ class AddressAdmin(admin.ModelAdmin):
         )
         return format_html('<a href="{}">{}</a>', url, obj.user_id)
 
-
     fieldsets = (
-        ('info', {'fields': ('user_id', 'ostan','shahrestan', 'is_default')}),
+        ('info', {'fields': ('user_id', 'ostan', 'shahrestan', 'is_default')}),
         ('more info', {'fields': ('street', 'postal_code', 'detail')}),
     )
 
     add_fieldsets = (
-        (None, {'fields': ('user_id', 'ostan','shahrestan', 'is_default', 'street', 'postal_code', 'detail')})
+        (None, {'fields': ('user_id', 'ostan', 'shahrestan', 'is_default', 'street', 'postal_code', 'detail')})
     )
 
-    search_fields = ('ostan','shahrestan')
+    search_fields = ('ostan', 'shahrestan')
     ordering = ('shahrestan',)
 
 
 @admin.register(PayAccount)
 class PayAccountAdmin(admin.ModelAdmin):
-
     list_display = ('account_number', 'term', 'user', 'is_default')
     list_filter = ('is_default',)
 
@@ -80,3 +74,6 @@ class PayAccountAdmin(admin.ModelAdmin):
             return 'expired'
 
     search_fields = ('account_number',)
+
+
+admin.site.register(OptCode)
