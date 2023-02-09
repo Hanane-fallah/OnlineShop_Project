@@ -1,7 +1,8 @@
 import random
 from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.contrib.auth.models import Group
+from django.contrib.auth import views as auth_view
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from core.utils import send_otp_code
@@ -101,3 +102,22 @@ class UserVerify(View):
                 messages.error(request, 'wrong code')
                 return redirect('account:verify')
         return redirect('index')
+
+
+class UserPasswordReset(auth_view.PasswordResetView):
+    template_name = 'account/password_reset_form.html'
+    success_url = reverse_lazy('account:password_reset_done')
+    email_template_name = 'account/password_reset_email.html'
+
+
+class UserPasswordResetDone(auth_view.PasswordResetDoneView):
+    template_name = 'account/password_reset_Done.html'
+
+
+class PasswordResetConfirm(auth_view.PasswordResetConfirmView):
+    template_name = 'account/password_reset_confirm.html'
+    success_url = reverse_lazy('account:password_reset_complete')
+
+
+class PasswordResetComplete(auth_view.PasswordResetCompleteView):
+    template_name = 'account/password_reset_complete.html'
