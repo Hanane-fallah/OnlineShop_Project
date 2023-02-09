@@ -71,7 +71,7 @@ class PromotionAdmin(admin.ModelAdmin):
 
 @admin.register(InProcessPromo)
 class InProcessPromotionAdmin(admin.ModelAdmin):
-    list_display = ('product_id', 'promotion_id', 'in_process',)
+    list_display = ('product', 'promotion_id', 'in_process',)
     list_filter = ('in_process', 'promotion_id',)
 
     search_fields = ('product_id',)

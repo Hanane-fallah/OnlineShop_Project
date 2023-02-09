@@ -1,4 +1,6 @@
 from datetime import date
+
+from django.contrib import messages
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -111,6 +113,29 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name} : {self.qty}'
 
+    def promo(self):
+        try:
+            promo_obj = InProcessPromo.objects.get(product_id=self)
+            if promo_obj.in_process:
+                return promo_obj.promotion_id
+
+        except:
+            return False
+
+    def price_discount(self):
+        try:
+            if self.promo:
+                promo = self.promo()
+                if promo.type_id.name == 'cash':
+                    if self.price > int(promo.hint):
+                        return self.price - float(promo.value)
+                elif promo.type_id.name == 'percentage':
+                    discount = self.price * float(promo.value)
+                    if discount < int(promo.hint):
+                        return self.price - discount
+        except (AttributeError, ValueError):
+            return False
+
 
 class PromotionType(models.Model):
     """
@@ -197,7 +222,7 @@ class InProcessPromo(models.Model):
     str:
         string representation of InProcessPromo object.
     """
-    product_id = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     promotion_id = models.ForeignKey(Promotion, on_delete=models.CASCADE)
     in_process = models.BooleanField(default=True)
 

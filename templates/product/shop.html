@@ -165,7 +165,15 @@
                                 <!-- Product Meta Data -->
                                 <div class="product-meta-data">
                                     <div class="line"></div>
-                                    <p class="product-price">${{ p.price }}</p>
+                                    <p class="product-price">${{ p.price }}
+                                     {% if p.price_discount %}
+                                    <span class="product-price" style="color: indianred">
+                                    in offer
+                                     ${{ p.price_discount }}
+                                    </span>
+
+                                    {% endif %}
+                                    </p>
                                     <a href="{% url 'product:detail' p.name %}">
                                         <h6>{{ p.name|title }}</h6>
                                     </a>
