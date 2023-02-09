@@ -19,6 +19,7 @@ class IndexCategories(ListView):
     template_name = 'product/index.html'
 
 
+@method_decorator(admin_user, name='get')
 class ShopCategories(ListView):
     model = Category
     template_name = 'product/shop.html'
@@ -37,5 +38,8 @@ class ShopCategories(ListView):
         return context
 
 
+@method_decorator(admin_user, name='get')
 class ProductDetail(DetailView):
     model = Product
+
+

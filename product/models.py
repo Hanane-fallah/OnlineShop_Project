@@ -1,9 +1,8 @@
 from datetime import date
-
-from django.contrib import messages
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from .managers import InProcessPromoManager
 from user.models import expiry_date_validate, User
 
 
@@ -234,7 +233,12 @@ class InProcessPromo(models.Model):
     ):
         promo_end = self.promotion_id.end_date
         if expiry_date_validate(promo_end):
-            super().save()
+            if not InProcessPromo.objects.filter(product=self.product, in_process=True).exists():
+                super().save()
+            else:
+                raise ValidationError(
+                    _('This Product already has offer')
+                )
         else:
             raise ValidationError(
                 _('This promo is expired')
