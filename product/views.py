@@ -1,5 +1,6 @@
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView
-
+from user.decorators import admin_user
 from product.models import Product, Category
 
 
@@ -12,6 +13,7 @@ class Products(ListView):
     paginate_by = 6
 
 
+@method_decorator(admin_user, name='get')
 class IndexCategories(ListView):
     model = Category
     template_name = 'product/index.html'
