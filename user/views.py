@@ -9,16 +9,31 @@ from core.utils import send_otp_code
 from .decorators import unauthenticated_user
 from django.utils.decorators import method_decorator
 from .forms import CustomerCreationFrom, VerifyCodeForm
-from .models import OptCode, User
+from .models import OtpCode, User
 
 
 @method_decorator(unauthenticated_user, name='get')
 class LoginPage(View):
+    """
+    Login view for users
+    and link to admin login
+
+    ...
+
+    Methods
+    -------
+    get:
+        sends login page html
+    post:
+        gets user's username & pass
+        authenticate user
+        :return home page
+    """
+
     def get(self, request):
         return render(request, 'account/login.html')
 
     def post(self, request):
-        # username = form.get(/)
         username = request.POST.get('username')
         password = request.POST.get('password')
         user_obj = authenticate(request, username=username, password=password)
@@ -31,6 +46,17 @@ class LoginPage(View):
 
 
 class LogoutPage(View):
+    """
+    Logout view for users
+
+    ...
+
+    Methods
+    -------
+    get:
+        logout user and redirect to home page
+
+    """
     def get(self, request):
         logout(request)
         return redirect('index')
@@ -38,6 +64,21 @@ class LogoutPage(View):
 
 @method_decorator(unauthenticated_user, name='get')
 class RegisterPage(View):
+    """
+    Register view for users
+
+    ...
+
+    Methods
+    -------
+    get:
+        send register page and form
+    post:
+        get & check data from form & send sms to user mobile
+        :return to verify page
+        wrong data: send register page again
+
+    """
     form_class = CustomerCreationFrom
     template_name = 'account/register.html'
     def get(self, request):
@@ -52,7 +93,7 @@ class RegisterPage(View):
         if form.is_valid():
             random_code = random.randint(1000, 9999)
             send_otp_code(form.cleaned_data['mobile'], random_code)
-            OptCode.objects.create(phone_number=form.cleaned_data['mobile'], code=random_code)
+            OtpCode.objects.create(phone_number=form.cleaned_data['mobile'], code=random_code)
             request.session['user_info'] = {
                 'first_name': form.cleaned_data['first_name'],
                 'last_name': form.cleaned_data['last_name'],
@@ -73,6 +114,22 @@ class RegisterPage(View):
 
 
 class UserVerify(View):
+    """
+    Verify User with OPT CODE
+
+    ...
+
+    Methods
+    -------
+    get:
+        send verify page and form
+    post:
+        check code and register user if valid
+        :return to login page
+        :wrong data send verify page again
+        :else gome page
+
+    """
     form_class = VerifyCodeForm
 
     def get(self, request):
@@ -81,7 +138,7 @@ class UserVerify(View):
 
     def post(self, request):
         user_session = request.session['user_info']
-        code_ins = OptCode.objects.get(phone_number=user_session['mobile'])
+        code_ins = OtpCode.objects.get(phone_number=user_session['mobile'])
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data

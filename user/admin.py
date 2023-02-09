@@ -76,4 +76,4 @@ class PayAccountAdmin(admin.ModelAdmin):
     search_fields = ('account_number',)
 
 
-admin.site.register(OptCode)
+admin.site.register(OtpCode)

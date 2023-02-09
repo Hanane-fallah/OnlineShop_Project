@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from django.core.validators import RegexValidator
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -176,10 +176,37 @@ class PayAccount(models.Model):
         return f'{self.user_id} - {self.account_number}'
 
 
-class OptCode(models.Model):
+class OtpCode(models.Model):
+    """
+    One Time Password Code Model
+    using for user authentication in register
+
+    ...
+
+    Attributes
+    ----------
+    phone_number : str
+        user's phone number
+    code : int
+        random code rendered in UserRegister View to be confirmed
+    created : datetime
+        automaticly stores creation datetime to setting expire code time
+
+    Methods
+    -------
+    save:
+        save the object in database
+    str:
+        string representation of One Time Password Code object.
+    expire_code_time:
+        calcs sxpired code time ( +2 mins )
+    """
     phone_number = models.CharField(max_length=11)
     code = models.PositiveSmallIntegerField()
     created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.phone_number} - {self.code} : {self.created}'
+
+    def expire_code_time(self):
+        return self.created + timedelta(minutes=2)
