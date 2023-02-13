@@ -69,6 +69,8 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
+                    <li style="color: #c7952f">Welcome {{ request.user.username }}</li>
+
                     <li class="active"><a href="{% url 'index' %}">Home</a></li>
                     <li><a href="{% url 'product:shop' %}">Shop</a></li>
                     {% if user.is_authenticated %}
