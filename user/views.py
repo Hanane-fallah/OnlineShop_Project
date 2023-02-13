@@ -31,6 +31,7 @@ class LoginPage(View):
     """
 
     def get(self, request):
+
         return render(request, 'account/login.html')
 
     def post(self, request):
@@ -38,8 +39,10 @@ class LoginPage(View):
         password = request.POST.get('password')
         user_obj = authenticate(request, username=username, password=password)
         if user_obj:
-            messages.success(request, 'User Loged in successfully')
             login(request, user_obj)
+            messages.success(request, 'user loged in successfully')
+            if user_obj.is_staff:
+                return redirect('admin:index')
         else:
             messages.info(request, 'username or pass incorrect')
         return redirect('account:login')
@@ -57,6 +60,7 @@ class LogoutPage(View):
         logout user and redirect to home page
 
     """
+
     def get(self, request):
         logout(request)
         return redirect('index')
@@ -81,6 +85,7 @@ class RegisterPage(View):
     """
     form_class = CustomerCreationFrom
     template_name = 'account/register.html'
+
     def get(self, request):
         # form = CustomerCreationFrom()
         context = {
@@ -143,22 +148,24 @@ class UserVerify(View):
         if form.is_valid():
             cd = form.cleaned_data
             if cd['code'] == code_ins.code:
-                User.objects.create_user(first_name=user_session['first_name'],
-                                         last_name=user_session['last_name'],
-                                         username=user_session['username'],
-                                         mobile=user_session['mobile'],
-                                         email=user_session['email'],
-                                         age=user_session['age'],
-                                         password=user_session['password1'],
+                user = User.objects.create_user(first_name=user_session['first_name'],
+                                                last_name=user_session['last_name'],
+                                                username=user_session['username'],
+                                                mobile=user_session['mobile'],
+                                                email=user_session['email'],
+                                                age=user_session['age'],
+                                                password=user_session['password1'],
 
-                                         )
+                                                )
+
+                login(request, user)
                 code_ins.delete()
                 messages.success(request, 'register successfully', 'success')
-                return redirect('account:login')
+                return redirect('index')
             else:
                 messages.error(request, 'wrong code')
                 return redirect('account:verify')
-        return redirect('index')
+        return redirect('account:register')
 
 
 class UserPasswordReset(auth_view.PasswordResetView):

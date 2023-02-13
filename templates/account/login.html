@@ -16,7 +16,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="../../static/css/style-login.css">
 
-    <title>Login</title>
+    <title>Amado Account</title>
 </head>
 <body>
 
@@ -29,7 +29,9 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-md-7">
                     <h3>Login to <strong>Amado</strong></h3>
-                    <p class="mb-4">Enter Your Username & Password to Log In</p>
+                    <p class="mb-4">Enter Your Username & Password to Log In
+                    <a style="text-decoration: none" href="{% url 'account:register' %}"> Or register New Account</a>
+                    </p>
                     <form action="" method="post">
 
                         {% for message in messages %}
@@ -38,11 +40,13 @@
                             {% endif %}
                         {% endfor %}
 
+
                         {% csrf_token %}
                         <div class="form-group first">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" placeholder="Your username" id="username"
                                    name="username">
+
 
 
                         </div>
@@ -64,9 +68,9 @@
 
                         <input type="submit" value="Log In" class="btn btn-block btn-primary">
                         <br>
-                        <div class="d-flex mb-5 align-items-center">
-                            <span class="ml-auto"><a href="{% url 'admin:login' %}" class="forgot-pass">LogIn as Admin?</a></span>
-                        </div>
+{#                        <div class="d-flex mb-5 align-items-center">#}
+{#                            <span class="ml-auto"><a href="{% url 'admin:login' %}" class="forgot-pass">LogIn as Admin?</a></span>#}
+{#                        </div>#}
                     </form>
                 </div>
             </div>
