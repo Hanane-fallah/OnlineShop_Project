@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from .models import User, PayAccount
 from django.urls import reverse
-from .forms import CustomerCreationFrom
 
 
 class ModelsTestCase(TestCase):
