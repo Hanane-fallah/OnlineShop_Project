@@ -3,10 +3,16 @@ from django.contrib import admin
 from order.models import UserCart, ShippingMethod, CartStatus, CartDetail, CartItem
 
 
+class CartIteminLine(admin.TabularInline):
+    model = CartItem
+    raw_id_fields = ('product',)
+
+
 @admin.register(UserCart)
 class UserCartAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id')
     search_fields = ('user_id', 'id')
+    inlines = (CartIteminLine, )
 
 
 @admin.register(ShippingMethod)
@@ -27,7 +33,6 @@ class StatusAdmin(admin.ModelAdmin):
 class CartDetailAdmin(admin.ModelAdmin):
     list_display = ('cart_id', 'order_date', 'entry',)
     list_filter = ('entry', 'order_date', 'shipping_id', 'promotion_id',)
-
     fieldsets = (
         ('Main info', {'fields': ('cart_id', 'order_date', 'total_amount', 'entry',)}),
         ('more info', {'fields': ('shipping_id', 'promotion_id')}),
@@ -43,3 +48,4 @@ class CartitemAdmin(admin.ModelAdmin):
     list_filter = ('product_id',)
     search_fields = ('cart_id', 'product_id')
     ordering = ('cart_id',)
+

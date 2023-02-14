@@ -2,7 +2,7 @@ from datetime import date
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from .managers import InProcessPromoManager
+from django.utils.safestring import mark_safe
 from user.models import expiry_date_validate, User
 
 
@@ -113,6 +113,11 @@ class Product(models.Model):
         return f'{self.name} : {self.qty}'
 
     def promo(self):
+        """
+        this function checks that our product has promotion or not
+        :return: inprocess-promo object
+        :return: false if no promo
+        """
         try:
             promo_obj = InProcessPromo.objects.get(product_id=self)
             if promo_obj.in_process:
@@ -122,18 +127,35 @@ class Product(models.Model):
             return False
 
     def price_discount(self):
+        """
+        this func calcs product final price with promotion value
+        :return: final price of the product with or without promo
+        """
         try:
             if self.promo:
+                """
+                if product has a promo it will be calced base on promo type 
+                """
                 promo = self.promo()
                 if promo.type_id.name == 'cash':
                     if self.price > int(promo.hint):
+                        """
+                        checks minimum value to perform promo
+                        """
                         return self.price - float(promo.value)
                 elif promo.type_id.name == 'percentage':
+                    """
+                    checks maximum value of offer before perform promo
+                    """
                     discount = self.price * float(promo.value)
                     if discount < int(promo.hint):
                         return self.price - discount
+
         except (AttributeError, ValueError):
             return False
+
+    def final_price(self):
+        return self.price_discount() or self.price
 
 
 class PromotionType(models.Model):

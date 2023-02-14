@@ -116,15 +116,18 @@ class CartDetail(models.Model):
         string representation of CartDetail object.
     """
 
-    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE)
+    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE, related_name='detail')
     order_date = models.DateField(null=True, blank=True)
-    shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True)
-    promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True)
+    shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True, related_name='shipping')
+    promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='promotion')
     total_amount = models.FloatField(null=True, blank=True)
     entry = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.cart_id} - {self.order_date} : {self.total_amount} $ - {self.entry}'
+
+    def calc_total_amount(self):
+        return sum([item.item_cost for item in self.items])
 
 
 class CartItem(models.Model):
@@ -149,9 +152,12 @@ class CartItem(models.Model):
     str:
         string representation of Cart object.
     """
-    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart_id = models.ForeignKey(UserCart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     qty = models.IntegerField()
+
+    def item_cost(self):
+        return (self.product.price_discount() or self.product.price) * self.qty
 
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -163,7 +169,7 @@ class CartItem(models.Model):
         :return: None
         :raise: Exception if Insufficient inventory
         """
-        if self.qty <= self.product_id.qty:
+        if self.qty <= self.product.qty:
             super().save()
         else:
             raise Exception("Insufficient inventory")
