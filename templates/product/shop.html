@@ -187,8 +187,13 @@
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
                                     <div class="cart">
-                                        <a href="cart.html" data-toggle="tooltip" data-placement="left"
-                                           title="Add to Cart"><img src="../../static/img/core-img/cart.png" alt=""></a>
+                                        <form action="{% url 'order:item_add' p.name %}" method="post" name="additem">
+                                            {% csrf_token %}
+                                            <input type="hidden" value=1 name="qty">
+                                            <button type="submit" class="btn btn-light"  data-toggle="tooltip" data-placement="left"
+                                            title="Add to Cart"><img src="../../static/img/core-img/cart.png" alt=""></button>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
