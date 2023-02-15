@@ -31,9 +31,24 @@ class UserCart(models.Model):
                           default=uuid.uuid4,
                           editable=False)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    entry = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user_id} : {self.id}'
+
+    @staticmethod
+    def user_open_cart(user):
+        """
+        this func looks for open cart in users carts
+        :return:id of the open cart
+        """
+        try:
+            cart = UserCart.objects.filter(user_id=user).get(entry=False)
+        # if cart:
+            return cart
+        except:
+            new_cart = UserCart.objects.create(user_id=user)
+            return new_cart
 
 
 class ShippingMethod(models.Model):
@@ -121,10 +136,9 @@ class CartDetail(models.Model):
     shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True, related_name='shipping')
     promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='promotion')
     total_amount = models.FloatField(null=True, blank=True)
-    entry = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.cart_id} - {self.order_date} : {self.total_amount} $ - {self.entry}'
+        return f'{self.cart_id} - {self.order_date} : {self.total_amount} $'
 
     def calc_total_amount(self):
         return sum([item.item_cost for item in self.items])

@@ -10,7 +10,8 @@ class CartIteminLine(admin.TabularInline):
 
 @admin.register(UserCart)
 class UserCartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_id')
+    list_display = ('id', 'user_id', 'entry')
+    list_filter = ('entry',)
     search_fields = ('user_id', 'id')
     inlines = (CartIteminLine, )
 
@@ -31,10 +32,10 @@ class StatusAdmin(admin.ModelAdmin):
 
 @admin.register(CartDetail)
 class CartDetailAdmin(admin.ModelAdmin):
-    list_display = ('cart_id', 'order_date', 'entry',)
-    list_filter = ('entry', 'order_date', 'shipping_id', 'promotion_id',)
+    list_display = ('cart_id', 'order_date',)
+    list_filter = ('order_date', 'shipping_id', 'promotion_id',)
     fieldsets = (
-        ('Main info', {'fields': ('cart_id', 'order_date', 'total_amount', 'entry',)}),
+        ('Main info', {'fields': ('cart_id', 'order_date', 'total_amount',)}),
         ('more info', {'fields': ('shipping_id', 'promotion_id')}),
     )
 
