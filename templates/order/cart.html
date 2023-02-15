@@ -49,17 +49,17 @@
                                         </td>
                                         <td class="qty">
                                             <div class="qty-btn d-flex">
-                                                <p>Qty</p>
+{#                                                <p>Qty</p>#}
                                                 <div class="quantity">
-                                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                                    <a href="" ><span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false; change_qty()"><i class="fa fa-minus" aria-hidden="true"></i></span></a>
                                                     <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value={{ item.qty }}>
-                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false; change_qty()"><i class="fa fa-plus" aria-hidden="true"></i></span>
                                                 </div>
                                             </div>
                                         </td>
                                     <td>
 
-                                            <a href="{% url 'order:cart_remove' item.name %}">
+                                            <a href="{% url 'order:item_remove' item.name %}">
                                                 <button type="button" class="btn btn-outline-warning" value="Remove">
                                                 REMOVE</button>
                                             </a>
@@ -77,7 +77,7 @@
                             <ul class="summary-table">
                                 <li><span>total:</span> <span>${{ total_amount }}</span></li>
                                 <li><span>delivery:</span> <span>Free</span></li>
-                                <li><span>discount:</span> <span style="color: red">${{ discount_price }}</span></li>
+                                <li><span>discount:</span> <span style="color: red">- ${{ discount_price }}</span></li>
                                 <li><span>final:</span> <span id="final_price">${{ final_price }}</span></li>
                             </ul>
                             <div class="cart-btn mt-100">
@@ -90,22 +90,21 @@
                 </div>
             </div>
         </div>
-{#    </div>#}
-{##}
-{#<script>#}
-{#    function finalprice()#}
-{#    {#}
-{#        var total = 0;#}
-{#        const cart = {{ cart }};#}
-{#        for (i=0; i < cart.keys().length; ++i)#}
-{#            {#}
-{#                total += cart[i].price;#}
-{#            }#}
-{#        document.getElementById("final_price").innerHTML = 'bla';#}
-{#        alert("Image is loaded");#}
-{#    }#}
-{#    finalprice()#}
-{#</script>#}
+    </div>
+
+<script>
+    function change_qty()
+    {
+        var total = 0;
+        const cart = {{ cart }};
+        for (i=0; i < cart.keys().length; ++i) {
+            total += cart[i].price;
+            }
+        document.getElementById("final_price").innerHTML = 'bla';
+        alert("Image is loaded");
+    }
+    finalprice()
+</script>
 
 
 

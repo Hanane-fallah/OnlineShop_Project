@@ -94,7 +94,7 @@
                             </div>
 
                             <!-- Add to Cart Form -->
-                            <form class="cart clearfix" method="post" action="{% url 'order:cart_add' product.name %}">
+                            <form class="cart clearfix" method="post" action="{% url 'order:item_add' product.name %}">
                                 {% csrf_token %}
                                 <div class="cart-btn d-flex mb-50">
                                     <p>Qty</p>

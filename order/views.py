@@ -9,7 +9,15 @@ from .models import UserCart, CartItem, CartDetail
 
 
 class CartView(View):
+    """
+    showing user cart info with request session data
+    """
+
     def get(self, request):
+        """
+        using request ro access session cart values ( with SessionCart utils )
+        :return:
+        """
         cart = CartSession(request)
         context = {
             'cart': cart,
@@ -21,18 +29,29 @@ class CartView(View):
         return render(request, 'order/cart.html', context)
 
 
-class CartAddView(View):
+class ItemAddView(View):
+    """
+    this view is for add to cart button
+    uses request session to store cart item values in cart session
+    """
+
     def post(self, request, product_name):
         cart = CartSession(request)
         product = get_object_or_404(Product, name=product_name)
         form = CartAddForm(request.POST)
+        print('----------------------')
         if form.is_valid():
             cart.add(product, form.cleaned_data['qty'])
-        #     todo: continue shopping
-        return redirect('order:cart_detail')
+            print('---- add -----')
+        #  redirect to remain on the current page
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
-class CartRemoveView(View):
+class ItemRemoveView(View):
+    """
+    this view deletes items from cart ( in request session )
+    """
+
     def get(self, request, product_name):
         cart = CartSession(request)
         product = get_object_or_404(Product, name=product_name)
@@ -48,6 +67,12 @@ class UserCartDetailView(LoginRequiredMixin, View):
 
 
 class UserCartCreateView(LoginRequiredMixin, View):
+    """
+    this view creates UserCart object for user in db
+    & creates cart items in CartItem
+    #  todo: add cart detail
+    """
+
     def get(self, request):
         cart = CartSession(request)
         cart_obj = UserCart.objects.create(user_id=request.user)
@@ -59,4 +84,3 @@ class UserCartCreateView(LoginRequiredMixin, View):
 
         cart.clear()
         return redirect('order:cart_detail')
-
