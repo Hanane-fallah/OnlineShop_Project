@@ -150,12 +150,16 @@ class Product(models.Model):
                     discount = self.price * float(promo.value)
                     if discount < int(promo.hint):
                         return self.price - discount
+            else:
+                return False
 
         except (AttributeError, ValueError):
             return False
 
     def final_price(self):
-        return self.price_discount() or self.price
+        if self.price_discount():
+            return self.price_discount()
+        return self.price
 
 
 class PromotionType(models.Model):

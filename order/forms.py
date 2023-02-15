@@ -7,4 +7,4 @@ class CartAddForm(forms.Form):
 
 class CartDetailForm(forms.Form):
     total_amount = forms.FloatField()
-    shipping = forms.FloatField()
+    shipping = forms.CharField(max_length=10)

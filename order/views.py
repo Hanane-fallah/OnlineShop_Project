@@ -24,8 +24,8 @@ class CartView(View):
         context = {
             'cart': cart,
             'total_amount': cart.total_price(),
-            'discount_price': cart.discount_price(),
-            'final_price': cart.final_price(),
+            'discount_price': cart.cart_discount_price(),
+            'final_price': cart.cart_final_price(),
             'shipping': ShippingMethod.objects.all(),
         }
 
@@ -61,13 +61,6 @@ class ItemRemoveView(View):
         return redirect('order:cart_detail')
 
 
-# todo: detailview
-class UserCartDetailView(LoginRequiredMixin, View):
-    def get(self, request, cart_id):
-        cart = get_object_or_404(CartDetail, id=cart_id)
-        return render(request, 'order/cart.html', {'cart': cart})
-
-
 class UserCartCreateView(LoginRequiredMixin, View):
     """
     this view creates UserCart object for user in db
@@ -100,8 +93,17 @@ class AddCartDetailView(LoginRequiredMixin, View):
         if form.is_valid():
             cart_id = UserCart.user_open_cart(request.user).id
             order_date = date.today()
-            shipping_id = form.cleaned_data['shipping']
-            total_amount = form.cleaned_data['total_amount'] + shipping_id.price
-            CartDetail.objects.create(cart_id_id=cart_id, order_date=order_date, shipping_id_id=shipping_id.id, total_amount=total_amount)
+            shipping_name = form.cleaned_data['shipping']
+            shipping_obj = ShippingMethod.objects.get(name=shipping_name)
+            shipping_price = shipping_obj.price
+            total_amount = form.cleaned_data['total_amount'] + shipping_price
+            CartDetail.objects.create(cart_id_id=cart_id, order_date=order_date, shipping_id=shipping_obj, total_amount=total_amount)
 
         return redirect('order:usercart_create')
+        # return redirect('order:cart_detail')
+
+
+class UserCartListView(LoginRequiredMixin, View):
+    def get(self, request):
+        carts = UserCart.objects.filter(user_id=request.user)
+        return render(request, 'order/cart_list.html', {'carts': carts})

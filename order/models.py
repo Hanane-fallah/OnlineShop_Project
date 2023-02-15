@@ -50,6 +50,12 @@ class UserCart(models.Model):
             new_cart = UserCart.objects.create(user_id=user)
             return new_cart
 
+    def cart_detail(self):
+        return CartDetail.objects.get(cart_id=self)
+
+    def cart_items(self):
+        return CartItem.objects.filter(cart_id=self)
+
 
 class ShippingMethod(models.Model):
     """
@@ -136,6 +142,7 @@ class CartDetail(models.Model):
     shipping_id = models.ForeignKey(ShippingMethod, on_delete=models.SET_NULL, null=True, blank=True, related_name='shipping')
     promotion_id = models.ForeignKey(Promotion, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='promotion')
     total_amount = models.FloatField(null=True, blank=True)
+    status = models.ForeignKey(CartStatus, on_delete=models.DO_NOTHING, default=1)
 
     def __str__(self):
         return f'{self.cart_id} - {self.order_date} : {self.total_amount} $'

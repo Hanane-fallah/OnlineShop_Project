@@ -32,7 +32,7 @@
                                         {#                                            <a href="#"><img src="../../static/img/bg-img/cart1.jpg" alt="Product"></a>#}
                                         <a href="{% url 'product:detail' item.name %}"><img src="{{ item.img }}"
                                                                                             width="150" height="150"
-                                                                                            alt="Product"></>
+                                                                                            alt="Product">
                                         {#                                                {{ item.img }}#}
                                     </td>
                                     <td class="cart_product_desc">
@@ -99,7 +99,7 @@
                                                             {% for s in shipping %}
     {#                                                        <input type="radio" name="shipping">{{ s }}#}
     {#                                                        <br><br>#}
-                                                            <option id="shipping_option" value="{{ s }}">{{ s.name }} : ${{ s.price }}</option>
+                                                            <option id="shipping_option" value="{{ s.name }}">{{ s.name }} : ${{ s.price }}</option>
 
                                                             {% endfor %}
 

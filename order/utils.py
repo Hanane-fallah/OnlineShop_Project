@@ -35,7 +35,7 @@ class CartSession:
             self.cart[product_id] = {
                 'qty': 0, 'price': product.price,
                 'name': product.name, 'img': product.image.url,
-                'price_discount': product.price_discount(),
+                'price_discount': product.price_discount() or 0,
                 'final_price': product.final_price()
             }
         self.cart[product_id]['qty'] += qty
@@ -60,10 +60,15 @@ class CartSession:
         total = sum(self.cart[p]['price']*self.cart[p]['qty'] for p in product_names)
         return total.__round__(2)
 
-    def discount_price(self):
-        return self.total_price() - self.final_price()
+    def cart_discount_price(self):
+        return self.total_price() - self.cart_final_price()
 
-    def final_price(self):
+    def cart_final_price(self):
         product_names = self.cart.keys()
-        total = sum(self.cart[p]['price_discount'] * self.cart[p]['qty'] for p in product_names)
+        # print(product_names)
+        # total = (self.cart[p]['final_price'] for p in product_names)
+        # for a in total:
+        #     print(type(a), '---', a)
+        # return total
+        total = sum(self.cart[p]['final_price'] * self.cart[p]['qty'] for p in product_names)
         return total.__round__(2)
