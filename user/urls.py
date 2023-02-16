@@ -16,5 +16,5 @@ urlpatterns = [
     path('profile/<str:slug>/', UserDetailView.as_view(), name='user_profile'),
     path('editprofile/<str:slug>/', UserEditView.as_view(), name='user_edit'),
     path('changepass/<str:slug>/', UserPasswordChangeView.as_view(template_name='account/change_password.html'), name='change_password'),
-
+    path('set_default_address/<int:old_ad>/<int:new_ad>/', SetDefaultAddress.as_view(), name='set_default_address')
 ]

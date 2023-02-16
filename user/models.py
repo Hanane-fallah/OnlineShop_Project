@@ -107,8 +107,15 @@ class User(AbstractUser):
         try:
             d_address = Address.objects.filter(user_id=self).get(is_default=True)
             return d_address
-        except AttributeError:
-            return 'No Address'
+        except:
+            return 'No default Address'
+
+    def all_addresses(self):
+        try:
+            d_address = Address.objects.filter(user_id=self)
+            return d_address
+        except :
+            return 'No default Address'
 
 
 class Address(models.Model):

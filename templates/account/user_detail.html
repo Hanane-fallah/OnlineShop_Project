@@ -35,7 +35,9 @@
     <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Email:</span> {{ object.email }}</li>
     <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Mobile:</span> {{ object.mobile }}</li>
 <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Date Joined:</span> {{ object.date_joined }}</li>
+<li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Your default Address:</span> {{ object.default_address }}</li>
 
+{#    <li class="display-28"><span class="display-25 text-secondary me-2 font-weight-600"><a style="font-size: 20px; text-decoration: None; color: #cb9a55" href="{% url 'account:user_edit' request.user.slug %}">Add or Change your Default Address here</a></span></li>#}
     <li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600"><a style="font-size: 20px; text-decoration: None; color: #cb9a55" href="{% url 'account:user_edit' request.user.slug %}">Edit Your Info </a></span></li>
 {#<li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600">Phone:</span> 507 - 541 - 4567</li>#}
 

@@ -6,10 +6,16 @@ from user.models import *
 from .forms import CustomerChangeForm, CustomerCreationFrom
 
 
+class AdressinLine(admin.TabularInline):
+    model = Address
+    raw_id_fields = ('ostan',)
+
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     form = CustomerChangeForm
     add_form = CustomerCreationFrom
+    inlines = (AdressinLine, )
 
     list_display = ('username', 'email', 'is_staff', 'date_joined')
     list_filter = ('is_staff', 'groups', 'last_login', 'date_joined')
@@ -36,10 +42,11 @@ class AddressAdmin(admin.ModelAdmin):
 
     def user(self, obj):
         url = (
-            reverse("admin:user_user_change", args=str(obj.user_id.id))
+            reverse("admin:user_user_change", kwargs={'object_id': str(obj.user_id.id)})
 
         )
         return format_html('<a href="{}">{}</a>', url, obj.user_id)
+        # return url
 
     fieldsets = (
         ('info', {'fields': ('user_id', 'ostan', 'shahrestan', 'is_default')}),

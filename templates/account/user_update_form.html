@@ -80,7 +80,23 @@
 {#                                        <button type="button" class="btn btn-danger btn-lg">Delete profile</button>#}
                                         <button type="submit" class="btn btn-primary btn-lg" style="background-color: #ec9625;border-color: #ec9625">Update profile</button>
                                     </div>
-                                    <a style="text-decoration: None" href="{% url 'account:change_password' object.slug %}"><h6 class="mb-4 mt-0">Change Password</h6></a>
+                                    <h4 class="mb-4 mt-0">Your addresses<p>click on address to set default</p></h4>
+                                    <ul>
+                                        {% for a in object.all_addresses %}
+                                            {% if a == object.default_address %}
+                                                <li><span style="border-color: #ec9625;text-decoration: None;font-size: 15px; color: #dea55f;font-weight: 100;">
+                                                <span class="fa fa-address-card" style="text-decoration: None; color: #ec9625">  {{ a }} </span>
+                                                </span>
+                                                <br><br>
+                                            {% else %}
+                                                <li><a href="{% url 'account:set_default_address' object.default_address.id a.id %}" style="text-decoration: None;font-size: 15px">
+                                                <span class="fa fa-address-card" style="text-decoration: None; color: dimgrey">  {{ a }}</span>
+                                                </a>
+                                                    <br><br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <a style="text-decoration: None" href="{% url 'account:change_password' object.slug %}"><h5 class="mb-4 mt-0">Change Your Password here</h5></a>
 
                                     </form>
                                 </div>

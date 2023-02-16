@@ -12,7 +12,7 @@ from core.utils import send_otp_code
 from .decorators import unauthenticated_user
 from django.utils.decorators import method_decorator
 from .forms import CustomerCreationFrom, VerifyCodeForm
-from .models import OtpCode, User
+from .models import OtpCode, User, Address
 from django.contrib.auth.forms import PasswordChangeForm
 
 
@@ -213,5 +213,13 @@ class UserPasswordChangeView(PasswordChangeView):
         return reverse_lazy('account:user_profile', kwargs={'slug': self.kwargs['slug']})
 
 
-# class ChangePasswordDone(View):
-#     ...
+class SetDefaultAddress(LoginRequiredMixin, View):
+    def get(self, request, old_ad, new_ad):
+        old_address = Address.objects.get(id=old_ad)
+        old_address.is_default = False
+        new_address = Address.objects.get(id=new_ad)
+        new_address.is_default = True
+        old_address.save()
+        new_address.save()
+        return redirect(request.META.get('HTTP_REFERER'))
+
