@@ -1,10 +1,14 @@
 import random
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib.auth import views as auth_view
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.views.generic import DetailView
+
 from core.utils import send_otp_code
 from .decorators import unauthenticated_user
 from django.utils.decorators import method_decorator
@@ -185,3 +189,8 @@ class PasswordResetConfirm(auth_view.PasswordResetConfirmView):
 
 class PasswordResetComplete(auth_view.PasswordResetCompleteView):
     template_name = 'account/password_reset_complete.html'
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'account/user_detail.html'
