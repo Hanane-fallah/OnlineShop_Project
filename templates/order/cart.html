@@ -104,6 +104,8 @@
                                                         </select>
 
                                                         </span></li>
+                        <li><span>Address:  </span><span>{{ request.user.default_address }}</span></li>
+                        <li><a href="{% url 'account:user_edit' request.user.slug %}" style="color: #b6843a">Edit Address & Info Here</a> </li>
                         </ul>
                     <div class="cart-btn mt-100">
 {#                        <form action="{% url 'order:cartdetail_create' %}" method="post" name="cartdetail">#}
