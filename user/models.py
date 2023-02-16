@@ -84,6 +84,7 @@ class User(AbstractUser):
     age = models.IntegerField(validators=[age_validate], blank=True, null=True)
     mobile = models.CharField(max_length=11, unique=True,
                               validators=[RegexValidator(r'09\d{9}', 'Your mobile number must start with 09')])
+    image = models.ImageField(upload_to='img/user/', default='img/user/avatar7.png')
     slug = models.SlugField(blank=True)
 
     def save(
@@ -101,6 +102,13 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def default_address(self):
+        try:
+            d_address = Address.objects.filter(user_id=self).get(is_default=True)
+            return d_address
+        except AttributeError:
+            return 'No Address'
 
 
 class Address(models.Model):
@@ -132,7 +140,7 @@ class Address(models.Model):
     str:
         string representation of Address object.
     """
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
     ostan = OstanField(default=8)
     shahrestan = ShahrestanField(default=126)
     street = models.CharField(max_length=50)
