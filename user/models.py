@@ -182,7 +182,7 @@ class PayAccount(models.Model):
     str:
         string representation of PayAccount object.
     """
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     account_number = models.BigIntegerField(validators=[account_number_validate])
     expiry_date = models.DateField(validators=[expiry_date_validate])
     is_default = models.BooleanField(default=False)

@@ -80,7 +80,7 @@
 {#                                        <button type="button" class="btn btn-danger btn-lg">Delete profile</button>#}
                                         <button type="submit" class="btn btn-primary btn-lg" style="background-color: #ec9625;border-color: #ec9625">Update profile</button>
                                     </div>
-                                    <h4 class="mb-4 mt-0">Your addresses<p>click on address to set default</p></h4>
+                                    <h4 class="mb-4 mt-0">Your addresses<p>click on address to set default<a style="text-decoration: None; color: #dea55f" href="{% url 'account:add_address' request.user.slug %}"> Or Add New Address</a> </p></h4>
                                     <ul>
                                         {% for a in object.all_addresses %}
                                             {% if a == object.default_address %}

@@ -7,7 +7,7 @@ from django.views import View
 from django.contrib.auth import views as auth_view
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, CreateView
 from core.utils import send_otp_code
 from .decorators import unauthenticated_user
 from django.utils.decorators import method_decorator
@@ -223,3 +223,25 @@ class SetDefaultAddress(LoginRequiredMixin, View):
         new_address.save()
         return redirect(request.META.get('HTTP_REFERER'))
 
+
+class AddressCreateView(LoginRequiredMixin, CreateView):
+    model = Address
+    fields = ['ostan', 'shahrestan', 'street', 'postal_code', 'detail']
+    template_name = 'account/address_form.html'
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user
+        address = form.save()
+        # self.set_default(self.request, address.id)
+        address.save()
+        return super().form_valid(form)
+
+    # def set_default(self, request, address_id):
+    #
+    #     # return SetDefaultAddress.as_view()(request, self.request.user.default_address, address_id)
+    #     old_ad = request.user.default_address()
+    #     print(old_ad)
+    #     return reverse_lazy("account:set_default_address", kwargs={'old_ad': old_ad.id, 'new_ad':address_id})
+
+    def get_success_url(self):
+        return reverse_lazy('account:user_edit', kwargs={'slug': self.kwargs['slug']})
