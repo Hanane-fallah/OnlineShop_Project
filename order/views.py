@@ -1,5 +1,4 @@
 from datetime import date
-
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from product.models import Product
@@ -80,14 +79,16 @@ class UserCartCreateView(LoginRequiredMixin, View):
         cart.clear()
         usercart.entry = True
         usercart.save()
-        return redirect('order:cart_detail')
+        return redirect('order:usercart_list')
 
 
 class AddCartDetailView(LoginRequiredMixin, View):
     """
     this view gets cart detail value & add to db
     create CartDetail object
+    :redirect ro add cart item view(UserCartCreateView)
     """
+
     def post(self, request):
         form = CartDetailForm(request.POST)
         if form.is_valid():
@@ -97,13 +98,32 @@ class AddCartDetailView(LoginRequiredMixin, View):
             shipping_obj = ShippingMethod.objects.get(name=shipping_name)
             shipping_price = shipping_obj.price
             total_amount = form.cleaned_data['total_amount'] + shipping_price
-            CartDetail.objects.create(cart_id_id=cart_id, order_date=order_date, shipping_id=shipping_obj, total_amount=total_amount)
+            CartDetail.objects.create(cart_id_id=cart_id, order_date=order_date, shipping_id=shipping_obj,
+                                      total_amount=total_amount)
 
         return redirect('order:usercart_create')
         # return redirect('order:cart_detail')
 
 
 class UserCartListView(LoginRequiredMixin, View):
+    """
+    this view filters user's carts that are checked out (entry = True)
+    """
+
     def get(self, request):
         carts = UserCart.objects.filter(user_id=request.user)
         return render(request, 'order/cart_list.html', {'carts': carts})
+
+
+class AddItemQtyView(View):
+    def get(self, request, product):
+        cart = CartSession(request)
+        cart.add_qty(product)
+        return redirect('order:cart_detail')
+
+
+class MinusItemQtyView(View):
+    def get(self, request, product):
+        cart = CartSession(request)
+        cart.minus_qty(product)
+        return redirect('order:cart_detail')

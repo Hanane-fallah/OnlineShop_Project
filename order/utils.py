@@ -72,3 +72,11 @@ class CartSession:
         # return total
         total = sum(self.cart[p]['final_price'] * self.cart[p]['qty'] for p in product_names)
         return total.__round__(2)
+
+    def add_qty(self, product):
+        self.cart[product]['qty'] += 1
+        self.save()
+
+    def minus_qty(self, product):
+        self.cart[product]['qty'] -= 1
+        self.save()
