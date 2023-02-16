@@ -1,19 +1,19 @@
 import random
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.contrib.auth import views as auth_view
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.views.generic import DetailView
-
+from django.views.generic import DetailView, UpdateView
 from core.utils import send_otp_code
 from .decorators import unauthenticated_user
 from django.utils.decorators import method_decorator
 from .forms import CustomerCreationFrom, VerifyCodeForm
 from .models import OtpCode, User
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 @method_decorator(unauthenticated_user, name='get')
@@ -194,3 +194,24 @@ class PasswordResetComplete(auth_view.PasswordResetCompleteView):
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'account/user_detail.html'
+
+
+class UserEditView(LoginRequiredMixin, UpdateView):
+    model = User
+    fields = ['first_name', 'last_name', 'age', 'mobile', 'username']
+    template_name = 'account/user_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('account:user_profile', kwargs={'slug': self.kwargs['slug']})
+
+
+class UserPasswordChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'account/change_password.html'
+
+    def get_success_url(self):
+        return reverse_lazy('account:user_profile', kwargs={'slug': self.kwargs['slug']})
+
+
+# class ChangePasswordDone(View):
+#     ...
