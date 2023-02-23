@@ -18,7 +18,6 @@
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
-                                <th>Remove</th>
 
                             </tr>
                             </thead>
@@ -57,18 +56,18 @@
                                                         class="fa fa-minus" aria-hidden="true"></i></span></a>
                                                 <input type="number" class="qty-text" id="qty" step="1" min="1"
                                                        max="300" name="quantity" value={{ item.qty }}>
+                                                <input type="hidden" value={{ item.qty }}>
                                                 <a href="{% url 'order:add_qty' item.name %}"> <span class="qty-plus"><i
                                                         class="fa fa-plus" aria-hidden="true"></i></span></a>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-
-                                        <a href="{% url 'order:item_remove' item.name %}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="{% url 'order:item_remove' item.name %}">
                                             <button type="button" class="btn btn-outline-warning" value="Remove">
                                                 REMOVE
                                             </button>
-                                        </a>
+                                            </a>
+                                        </div>
+
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -104,9 +103,9 @@
                                                         </select>
 
                                                         </span></li>
-                        <li><span>Address:  </span><span>{{ request.user.default_address }}</span></li>
-                        <li><a href="{% url 'account:user_edit' request.user.slug %}" style="color: #b6843a">Edit Address & Info Here</a> </li>
-                        </ul>
+{#                        <li><span>Address:  </span><span>{{ request.user.default_address }}</span></li>#}
+{#                        <li><a href="{% url 'account:user_edit' request.user.slug %}" style="color: #b6843a">Edit Address & Info Here</a> </li>#}
+{#                        </ul>#}
                     <div class="cart-btn mt-100">
 {#                        <form action="{% url 'order:cartdetail_create' %}" method="post" name="cartdetail">#}
 {#                        {% csrf_token %}#}
