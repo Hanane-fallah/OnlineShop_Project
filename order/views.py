@@ -55,8 +55,9 @@ class ItemRemoveView(View):
 
     def get(self, request, product_name):
         cart = CartSession(request)
-        product = get_object_or_404(Product, name=product_name)
-        cart.remove(product)
+        # product = get_object_or_404(Product, name=product_name)
+        # cart.remove(product)
+        cart.remove(product_name)
         return redirect('order:cart_detail')
 
 
@@ -127,3 +128,31 @@ class MinusItemQtyView(View):
         cart = CartSession(request)
         cart.minus_qty(product)
         return redirect('order:cart_detail')
+
+
+from rest_framework.reverse import reverse
+import requests as client
+DOMAIN = "http://127.0.0.1:8000"
+class ApiAddItem(View):
+    def get(self, request):
+        cart = CartSession(request)
+        usercart = UserCart.user_open_cart(request.user)
+        usercart_id = usercart.id
+        endpoint = reverse('order:item_list')
+        for item in cart:
+            product = Product.objects.get(name=item['name'])
+            a = client.post(f"{DOMAIN}{endpoint}", data={
+                'cart_id': usercart,
+                'product': product,
+                'qty': item['qty']
+            })
+            # print(a.data)
+            # CartItem.objects.create(cart_id_id=usercart_id,
+            #                         product_id=item['name'],
+            #                         qty=item['qty']
+            #                         )
+
+        cart.clear()
+        usercart.entry = True
+        usercart.save()
+        return redirect('order:usercart_list')

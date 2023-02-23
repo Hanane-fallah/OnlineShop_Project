@@ -42,10 +42,10 @@ class CartSession:
         self.total_price()
         self.save()
 
-    def remove(self, product):
-        produc_name = str(product.name)
-        if produc_name in self.cart:
-            del self.cart[produc_name]
+    def remove(self, product_name):
+        # product_name = str(product.name)
+        if product_name in self.cart:
+            del self.cart[product_name]
             self.save()
 
     def save(self):
@@ -78,5 +78,8 @@ class CartSession:
         self.save()
 
     def minus_qty(self, product):
-        self.cart[product]['qty'] -= 1
-        self.save()
+        if self.cart[product]['qty'] > 2:
+            self.cart[product]['qty'] -= 1
+            self.save()
+        else:
+            self.remove(product)
