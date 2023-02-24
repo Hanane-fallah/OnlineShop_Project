@@ -1,4 +1,6 @@
 from datetime import date
+
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from product.models import Product
@@ -43,7 +45,13 @@ class ItemAddView(View):
         form = CartAddForm(request.POST)
 
         if form.is_valid():
-            cart.add(product, form.cleaned_data['qty'])
+            # checks product stock with ordered qty
+            if product.qty >= form.cleaned_data['qty']:
+                cart.add(product, form.cleaned_data['qty'])
+                product.qty -= form.cleaned_data['qty']
+                product.save()
+            else:
+                messages.info(request, 'insufficient quantity :(')
         #  redirect to remain on the current page
         return redirect(request.META.get('HTTP_REFERER'))
 

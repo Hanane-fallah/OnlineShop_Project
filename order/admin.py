@@ -35,7 +35,7 @@ class CartDetailAdmin(admin.ModelAdmin):
     list_display = ('cart_id', 'order_date',)
     list_filter = ('order_date', 'shipping_id', 'promotion_id',)
     fieldsets = (
-        ('Main info', {'fields': ('cart_id', 'order_date', 'total_amount',)}),
+        ('Main info', {'fields': ('cart_id', 'order_date', 'total_amount','status')}),
         ('more info', {'fields': ('shipping_id', 'promotion_id')}),
     )
 

@@ -165,7 +165,9 @@
                                 <!-- Product Meta Data -->
                                 <div class="product-meta-data">
                                     <div class="line"></div>
+                                     {% if p.qty %}
                                     <p class="product-price">${{ p.price }}
+                                     {% endif %}
                                      {% if p.price_discount %}
                                     <span class="product-price" style="color: indianred">
                                     in offer
@@ -181,19 +183,22 @@
                                 <!-- Ratings & Cart -->
                                 <div class="ratings-cart text-right">
                                     <div class="ratings">
-                                        <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
+
                                     <div class="cart">
+                                        {% if p.qty > 0 %}
                                         <form action="{% url 'order:item_add' p.name %}" method="post" name="additem">
                                             {% csrf_token %}
                                             <input type="hidden" value=1 name="qty">
                                             <button type="submit" class="btn btn-light"  data-toggle="tooltip" data-placement="left"
                                             title="Add to Cart"><img src="../../static/img/core-img/cart.png" alt=""></button>
                                         </form>
-
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

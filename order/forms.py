@@ -2,7 +2,7 @@ from django import forms
 
 
 class CartAddForm(forms.Form):
-    qty = forms.IntegerField(min_value=1, max_value=9)
+    qty = forms.IntegerField(min_value=1, max_value=300)
 
 
 class CartDetailForm(forms.Form):

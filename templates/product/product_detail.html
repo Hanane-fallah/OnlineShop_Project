@@ -83,7 +83,7 @@
                                 <!-- Avaiable -->
                                 <p class="avaibility"><i class="fa fa-circle"></i> In Stock</p>
                                 {% else %}
-                                <p class="avaibility" style="color: darkred"><i class="fa fa-circle"></i>Finished</p>
+                                <p class="avaibility"><i class="fa fa-circle" style="color: red"></i> Finished</p>
 
                                 {% endif %}
                             </div>
@@ -94,18 +94,26 @@
                             </div>
 
                             <!-- Add to Cart Form -->
+                            {% if product.qty > 0 %}
+
                             <form class="cart clearfix" method="post" action="{% url 'order:item_add' product.name %}">
                                 {% csrf_token %}
                                 <div class="cart-btn d-flex mb-50">
                                     <p>Qty</p>
                                     <div class="quantity">
                                         <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                                        <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="qty" value="1">
+                                        <input type="number" class="qty-text" id="qty" step="1" min="1" max="100" name="qty" value="1">
                                         <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
                                     </div>
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <p style="color: #bd3b3b">{{ message }}</p>
+                                    {% endfor %}
+                                {% endif %}
                                 </div>
                                 <input type="submit" name="addtocart" value="Add to cart" class="btn amado-btn">
                             </form>
+                                {% endif %}
 
                         </div>
                     </div>
