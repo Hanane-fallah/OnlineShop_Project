@@ -34,8 +34,12 @@ class LoginPage(View):
         :return home page
     """
 
-    def get(self, request):
+    def setup(self, request, *args, **kwargs):
+        # get next url for redirect
+        self.next = request.GET.get('next')
+        return super().setup(request, *args, **kwargs)
 
+    def get(self, request):
         return render(request, 'account/login.html')
 
     def post(self, request):
@@ -44,10 +48,12 @@ class LoginPage(View):
         user_obj = authenticate(request, username=username, password=password)
         if user_obj:
             login(request, user_obj)
-            messages.success(request, 'user loged in successfully')
-            #todo: if remember me
+            # todo: if remember me
             if user_obj.is_staff:
                 return redirect('admin:index')
+            if self.next:
+                return redirect(self.next)
+
         else:
             messages.info(request, 'username or pass incorrect')
         return redirect('account:login')
@@ -245,4 +251,3 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
 
         return reverse_lazy('account:user_edit', kwargs={'slug': self.kwargs['slug']})
         # return redirect(self.request.META.get('HTTP_REFERER'))
-
