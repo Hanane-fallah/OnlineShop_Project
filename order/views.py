@@ -48,8 +48,6 @@ class ItemAddView(View):
             # checks product stock with ordered qty
             if product.qty >= form.cleaned_data['qty']:
                 cart.add(product, form.cleaned_data['qty'])
-                product.qty -= form.cleaned_data['qty']
-                product.save()
             else:
                 messages.info(request, 'insufficient quantity :(')
         #  redirect to remain on the current page
@@ -84,6 +82,9 @@ class UserCartCreateView(LoginRequiredMixin, View):
                                     product_id=item['name'],
                                     qty=item['qty']
                                     )
+            product = Product.objects.get(name=item['name'])
+            product.qty -= item['qty']
+            product.save()
 
         cart.clear()
         usercart.entry = True
@@ -138,7 +139,7 @@ class MinusItemQtyView(View):
         return redirect('order:cart_detail')
 
 
-class CheckOutView(View):
+class CheckOutView(LoginRequiredMixin, View):
 
     def get(self, request):
         cart = CartSession(request)
