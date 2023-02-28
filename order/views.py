@@ -139,20 +139,25 @@ class MinusItemQtyView(View):
 
 
 class CheckOutView(View):
-    def dispatch(self, request, *args, **kwargs):
-        if request.path == reverse('order:checkout'):
-            return redirect('order:cartdetail_create')
-        else:
-            return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        user = request.user
-        return render(request, 'order/checkout.html', {'user': user})
+        cart = CartSession(request)
+        if len(cart):
+            context = {
+                'user': request.user,
+                'cart': cart,
+                'total_amount': cart.total_price(),
+                'discount_price': cart.cart_discount_price(),
+                'final_price': cart.cart_final_price(),
+                'shipping': ShippingMethod.objects.all(),
+            }
+            return render(request, 'order/checkout.html', context=context)
+        else:
+            messages.info(request, 'Your Cart Is Empty')
+            return redirect(request.META.get('HTTP_REFERER'))
 
     def post(self, request):
-        user = request.user
-        return render(request, 'order/checkout.html', {'user': user})
-
+        return redirect('order:checkout')
 
 # API
 

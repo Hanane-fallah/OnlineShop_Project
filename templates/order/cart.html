@@ -8,6 +8,11 @@
                 <div class="col-12 col-lg-8">
                 {% block cartinfo %}
                     <div class="cart-title mt-50">
+                    {% for message in messages %}
+                            {% if forloop.last %}
+                                <p class="mb-4" style="color: indianred">{{ message }}</p>
+                            {% endif %}
+                        {% endfor %}
                         <h2>Shopping Cart</h2>
                     </div>
 

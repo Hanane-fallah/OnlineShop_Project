@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-12 col-lg-4">
 {#                    <form action="{% url 'order:api:detail_create' %}" method="post" name="cartdetail">#}
-                    <form action="{% url 'order:checkout' %}" method="post" name="cartdetail">
+                    <form action="{% url 'order:cartdetail_create' %}" method="post" name="cartdetail">
                     {% csrf_token %}
                     <div class="cart-summary">
 
