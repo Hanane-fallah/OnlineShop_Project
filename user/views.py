@@ -45,6 +45,7 @@ class LoginPage(View):
         if user_obj:
             login(request, user_obj)
             messages.success(request, 'user loged in successfully')
+            #todo: if remember me
             if user_obj.is_staff:
                 return redirect('admin:index')
         else:
@@ -214,12 +215,13 @@ class UserPasswordChangeView(PasswordChangeView):
 
 
 class SetDefaultAddress(LoginRequiredMixin, View):
-    def get(self, request, old_ad, new_ad):
-        old_address = Address.objects.get(id=old_ad)
-        old_address.is_default = False
+    def get(self, request, new_ad):
         new_address = Address.objects.get(id=new_ad)
         new_address.is_default = True
-        old_address.save()
+        old_address = request.user.default_address()
+        if old_address:
+            old_address.is_default = False
+            old_address.save()
         new_address.save()
         return redirect(request.META.get('HTTP_REFERER'))
 
@@ -236,12 +238,11 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         address.save()
         return super().form_valid(form)
 
-    # def set_default(self, request, address_id):
-    #
-    #     # return SetDefaultAddress.as_view()(request, self.request.user.default_address, address_id)
-    #     old_ad = request.user.default_address()
-    #     print(old_ad)
-    #     return reverse_lazy("account:set_default_address", kwargs={'old_ad': old_ad.id, 'new_ad':address_id})
-
     def get_success_url(self):
+        r_path = self.request.path
+        if r_path == reverse_lazy('order:add_checkout_address', kwargs={'slug': self.kwargs['slug']}):
+            return reverse_lazy('order:checkout')
+
         return reverse_lazy('account:user_edit', kwargs={'slug': self.kwargs['slug']})
+        # return redirect(self.request.META.get('HTTP_REFERER'))
+

@@ -138,23 +138,42 @@ class MinusItemQtyView(View):
         return redirect('order:cart_detail')
 
 
+class CheckOutView(View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.path == reverse('order:checkout'):
+            return redirect('order:cartdetail_create')
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        user = request.user
+        return render(request, 'order/checkout.html', {'user': user})
+
+    def post(self, request):
+        user = request.user
+        return render(request, 'order/checkout.html', {'user': user})
+
+
+# API
+
 from rest_framework.reverse import reverse
 import requests as client
 DOMAIN = "http://127.0.0.1:8000"
 class ApiAddItem(View):
-    def get(self, request):
+    def post(self, request, product_name):
         cart = CartSession(request)
         usercart = UserCart.user_open_cart(request.user)
         usercart_id = usercart.id
-        endpoint = reverse('order:item_list')
+        endpoint = reverse('order:api:v1:item_list')
         for item in cart:
             product = Product.objects.get(name=item['name'])
+            print('{DOMAIN}{endpoint}')
             a = client.post(f"{DOMAIN}{endpoint}", data={
                 'cart_id': usercart,
                 'product': product,
                 'qty': item['qty']
             })
-            # print(a.data)
+            print(a)
             # CartItem.objects.create(cart_id_id=usercart_id,
             #                         product_id=item['name'],
             #                         qty=item['qty']
@@ -164,3 +183,27 @@ class ApiAddItem(View):
         usercart.entry = True
         usercart.save()
         return redirect('order:usercart_list')
+
+
+
+class CartDetailApi(View):
+    def post(self, request):
+        form = CartDetailForm(request.POST)
+        if form.is_valid():
+            cart_id = UserCart.user_open_cart(request.user).id
+            order_date = date.today()
+            shipping_name = form.cleaned_data['shipping']
+            shipping_obj = ShippingMethod.objects.get(name=shipping_name)
+            shipping_price = shipping_obj.price
+            total_amount = form.cleaned_data['total_amount'] + shipping_price
+            endpoint = reverse('order:api:item_list')
+            client.post(f"{DOMAIN}{endpoint}", data={
+              'cart_id': cart_id,
+              'order_date': order_date,
+              'shipping_id': shipping_obj,
+              'total_amount': total_amount
+            })
+            # CartDetail.objects.create(cart_id_id=cart_id, order_date=order_date, shipping_id=shipping_obj,
+            #                           total_amount=total_amount)
+
+        return redirect('order:usercart_create')

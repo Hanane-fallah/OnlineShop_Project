@@ -89,7 +89,7 @@
                                                 </span>
                                                 <br><br>
                                             {% else %}
-                                                <li><a href="{% url 'account:set_default_address' object.default_address.id a.id %}" style="text-decoration: None;font-size: 15px">
+                                                <li><a href="{% url 'account:set_default_address' a.id %}" style="text-decoration: None;font-size: 15px">
                                                 <span class="fa fa-address-card" style="text-decoration: None; color: dimgrey">  {{ a }}</span>
                                                 </a>
                                                     <br><br>

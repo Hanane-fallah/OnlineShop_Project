@@ -1,0 +1,103 @@
+{% extends 'product/index.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                {% block cartinfo %}
+
+                    <div class="cart-title mt-50">
+                        <h4 class="mb-4 mt-0">Your addresses<p>click on address to set default<a style="text-decoration: None; color: #dea55f" href="{% url 'order:add_checkout_address' request.user.slug %}"> Or Add New Address</a> </p></h4>
+
+                    </div>
+
+                    <div class="cart-table clearfix">
+                    {% block addressinfo %}
+                        <ul>
+                        {% if not user.all_addresses %}
+                        <li>no addresses yet</li>
+                        {% else %}
+                            {% for a in user.all_addresses %}
+                                {% if a == user.default_address %}
+                                    <li><span style="border-color: #ec9625;text-decoration: None;font-size: 15px; color: #dea55f;font-weight: 100;">
+                                    <span class="fa fa-address-card" style="text-decoration: None; color: #ec9625">  {{ a }} </span>
+                                    </span>
+                                    <br><br>
+                                {% else %}
+                                    <li><a href="{% url 'account:set_default_address' a.id %}" style="text-decoration: None;font-size: 15px">
+                                    <span class="fa fa-address-card" style="text-decoration: None; color: dimgrey">  {{ a }}</span>
+                                    </a>
+                                        <br><br>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% endif %}
+                        </ul>
+                    {% endblock addressinfo %}
+
+
+
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+{#                    <form action="{% url 'order:api:detail_create' %}" method="post" name="cartdetail">#}
+                    <form action="{% url 'order:checkout' %}" method="post" name="cartdetail">
+                    {% csrf_token %}
+                    <div class="cart-summary">
+
+                        <h5>Cart Open</h5>
+                        <ul class="summary-table">
+                            <li><span>total:</span> <span>${{ total_amount }}</span></li>
+                            <li><span>discount:</span> <span style="color: red">- ${{ discount_price }}</span></li>
+                            <li><span>final:</span> <span id="final_price">${{ final_price }}</span></li>
+    {#                        <li><span>status:</span> <span id="final_price">OPEN</span></li>#}
+                            <li><span>delivery:</span> <span>
+                                                        <select name="shipping" id="shipping">
+    {#                                                    <option value="saab">Saab</option>#}
+    {#                                                    <option value="mercedes">Mercedes</option>#}
+    {#                                                    <option value="audi">Audi</option>#}
+
+                                                            {% for s in shipping %}
+    {#                                                        <input type="radio" name="shipping">{{ s }}#}
+    {#                                                        <br><br>#}
+                                                            <option id="shipping_option" value="{{ s.name }}">{{ s.name }} : ${{ s.price }}</option>
+
+                                                            {% endfor %}
+
+                                                        </select>
+
+                                                        </span></li>
+{#                        <li><span>Address:  </span><span>{{ request.user.default_address }}</span></li>#}
+{#                        <li><a href="{% url 'account:user_edit' request.user.slug %}" style="color: #b6843a">Edit Address & Info Here</a> </li>#}
+{#                        </ul>#}
+                    <div class="cart-btn mt-100">
+{#                        <form action="{% url 'order:cartdetail_create' %}" method="post" name="cartdetail">#}
+{#                        {% csrf_token %}#}
+
+                            <input type="hidden" value={{ final_price }} name="total_amount">
+{#                            <input type="hidden" value= name="shipping">#}
+                            <button type="submit" class="btn amado-btn w-100" name="submit">Checkout</button>
+
+
+                    </div>
+                    </div>
+                    </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+
+
+
+    {% endblock cartinfo %}
+
+{% endblock %}
+

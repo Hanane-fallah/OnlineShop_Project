@@ -108,7 +108,7 @@ class User(AbstractUser):
             d_address = Address.objects.filter(user_id=self).get(is_default=True)
             return d_address
         except:
-            return 'No default Address'
+            return False
 
     def all_addresses(self):
         try:
