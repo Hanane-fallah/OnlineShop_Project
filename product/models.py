@@ -1,6 +1,7 @@
 from datetime import date
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from user.models import expiry_date_validate, User
@@ -108,6 +109,20 @@ class Product(models.Model):
     price = models.FloatField(validators=[digit_validate])
     qty = models.IntegerField(validators=[digit_validate])
     image = models.ImageField(upload_to='img/product')
+    slug = models.SlugField(blank=True)
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        """
+        adding a slug (-) in each of the string where there is a space in name
+        & put it in slug field
+        & then save the object in database
+        :param force_insert, force_update, using, update_fields: django default params
+        :return:None
+        """
+        self.slug = slugify(self.name)
+        super().save()
 
     def __str__(self):
         return f'{self.name} : {self.qty}'

@@ -45,7 +45,7 @@ class ProductAdmin(admin.ModelAdmin):
             return obj.qty
 
     fieldsets = (
-        ('Main info', {'fields': ('name', 'category_id', 'brand', 'qty')}),
+        ('Main info', {'fields': ('name', 'category_id', 'brand', 'qty', 'slug')}),
         ('More info', {'fields': ('price', 'info', 'image')}),
 
     )
