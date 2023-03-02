@@ -27,8 +27,8 @@ class UserAdmin(BaseUserAdmin):
     )
 
     add_fieldsets = (
-        (None, {'fields': ('first_name', 'last_name', 'email', 'age', 'mobile', 'password1', 'password2')})
-    )
+        (None, {'fields': ('username', 'first_name', 'last_name', 'email', 'age', 'mobile', 'password1', 'password2')})
+    ),
     search_fields = ('email', 'username')
     ordering = ('date_joined',)
     filter_horizontal = ('groups', 'user_permissions')
